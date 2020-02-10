@@ -18,7 +18,7 @@ Currently, there are just a few functions for calculating survey sampling error:
 
 ```r
 # You can view examples for each function
-?error_se       # standard error of a proportion
+?error_se_prop  # standard error of a proportion
 ?error_se_mean  # standard error of mean
 ?error_me       # margin of error (for confidence intervals)
 ```

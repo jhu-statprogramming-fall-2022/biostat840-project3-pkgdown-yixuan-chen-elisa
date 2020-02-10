@@ -33,6 +33,6 @@ error_se_mean(x, na.rm = TRUE)
 \seealso{
 Other functions for estimating sampling error: 
 \code{\link{error_me}()},
-\code{\link{error_se}()}
+\code{\link{error_se_prop}()}
 }
 \concept{functions for estimating sampling error}

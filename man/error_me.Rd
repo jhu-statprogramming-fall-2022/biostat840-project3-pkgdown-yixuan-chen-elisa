@@ -9,14 +9,21 @@ error_me(std_error, confidence = 0.95)
 \arguments{
 \item{std_error}{numeric: Estimated standard error}
 
-\item{confidence}{numeric: Confidence level (0 < confidence < 1)}
+\item{confidence}{numeric: Confidence level (0 < confidence < 1). This
+default is approximately equal to std_error * 1.96}
 }
 \description{
-Calculate Margin of Error at given confidence level
+This is particularly useful for constructing confidence intervals.
 }
 \examples{
 # maximum margin of error (proportion) for N=100: 9.8\%
-std_error <- error_se(0.5, 100)
+std_error <- error_se_prop(0.5, 100)
+error_me(std_error)
+
+# margin of error for mean
+x <- rlnorm(50, 3)
+summary(x)
+std_error <- error_se_mean(x)
 error_me(std_error)
 }
 \references{
@@ -25,6 +32,6 @@ error_me(std_error)
 \seealso{
 Other functions for estimating sampling error: 
 \code{\link{error_se_mean}()},
-\code{\link{error_se}()}
+\code{\link{error_se_prop}()}
 }
 \concept{functions for estimating sampling error}

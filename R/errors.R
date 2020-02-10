@@ -24,6 +24,7 @@ error_se_mean <- function(x, na.rm = FALSE) {
     sqrt(var(x) / length(x))
 }
 
+
 #' Calculate Standard Error of a Proportion
 #'
 #' @param pct numeric: Estimated proportion
@@ -36,21 +37,30 @@ error_se_mean <- function(x, na.rm = FALSE) {
 #' x <- c(rep("Checked", 10), rep("Unchecked", 20))
 #' N <- length(x)
 #' pct <- prop.table(table(x))
-#' error_se(pct, N)
-error_se <- function(pct, N) {
+#' error_se_prop(pct, N)
+error_se_prop <- function(pct, N) {
     sqrt(pct * (1 - pct) / N)
 }
 
 #' Calculate Margin of Error at given confidence level
 #'
+#' This is particularly useful for constructing confidence intervals.
+#'
 #' @param std_error numeric: Estimated standard error
-#' @param confidence numeric: Confidence level (0 < confidence < 1)
+#' @param confidence numeric: Confidence level (0 < confidence < 1). This
+#' default is approximately equal to std_error * 1.96
 #' @references \url{http://en.wikipedia.org/wiki/Margin_of_error}
 #' @family functions for estimating sampling error
 #' @export
 #' @examples
 #' # maximum margin of error (proportion) for N=100: 9.8%
-#' std_error <- error_se(0.5, 100)
+#' std_error <- error_se_prop(0.5, 100)
+#' error_me(std_error)
+#'
+#' # margin of error for mean
+#' x <- rlnorm(50, 3)
+#' summary(x)
+#' std_error <- error_se_mean(x)
 #' error_me(std_error)
 error_me <- function(std_error, confidence = 0.95) {
     prob <- confidence + (1 - confidence) / 2
