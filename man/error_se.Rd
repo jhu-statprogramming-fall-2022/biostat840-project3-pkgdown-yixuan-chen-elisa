@@ -11,21 +11,17 @@ error_se(pct, N)
 
 \item{N}{numeric: Number of Responses}
 }
-\value{
-Returns a standard error value.
-}
 \description{
 Calculate Standard Error of a Proportion
 }
 \examples{
-# standard error for N=30: 33\%/67\%
+# standard error for N=30, pct=33\%/67\%
 x <- c(rep("Checked", 10), rep("Unchecked", 20))
 N <- length(x)
 pct <- prop.table(table(x))
 error_se(pct, N)
 }
 \references{
-\url{http://en.wikipedia.org/wiki/Margin_of_error} \cr
 \url{http://en.wikipedia.org/wiki/Standard_error}
 }
 \seealso{

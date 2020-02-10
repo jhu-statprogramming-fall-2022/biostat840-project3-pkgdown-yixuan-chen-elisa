@@ -4,7 +4,6 @@
 #'
 #' @param x vector: Input numeric vector to be summarized
 #' @param na.rm logical: If TRUE, NA (missing) values will be ignored.
-#' @return Returns a standard error value.
 #' @references \url{http://en.wikipedia.org/wiki/Standard_error}
 #' @family functions for estimating sampling error
 #' @export
@@ -29,13 +28,11 @@ error_se_mean <- function(x, na.rm = FALSE) {
 #'
 #' @param pct numeric: Estimated proportion
 #' @param N numeric: Number of Responses
-#' @return Returns a standard error value.
-#' @references \url{http://en.wikipedia.org/wiki/Margin_of_error} \cr
-#' \url{http://en.wikipedia.org/wiki/Standard_error}
+#' @references \url{http://en.wikipedia.org/wiki/Standard_error}
 #' @family functions for estimating sampling error
 #' @export
 #' @examples
-#' # standard error for N=30: 33%/67%
+#' # standard error for N=30, pct=33%/67%
 #' x <- c(rep("Checked", 10), rep("Unchecked", 20))
 #' N <- length(x)
 #' pct <- prop.table(table(x))
@@ -44,15 +41,11 @@ error_se <- function(pct, N) {
     sqrt(pct * (1 - pct) / N)
 }
 
-#' Calculate Margin of Error
+#' Calculate Margin of Error at given confidence level
 #'
-#' Calculates margin of error for a given standard error at a given
-#' confidence interval.
 #' @param std_error numeric: Estimated standard error
 #' @param confidence numeric: Confidence level (0 < confidence < 1)
-#' @return Returns a margin of error value.
-#' @references \url{http://en.wikipedia.org/wiki/Margin_of_error} \cr
-#' \url{http://en.wikipedia.org/wiki/Standard_error}
+#' @references \url{http://en.wikipedia.org/wiki/Margin_of_error}
 #' @family functions for estimating sampling error
 #' @export
 #' @examples

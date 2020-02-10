@@ -11,9 +11,6 @@ error_se_mean(x, na.rm = FALSE)
 
 \item{na.rm}{logical: If TRUE, NA (missing) values will be ignored.}
 }
-\value{
-Returns a standard error value.
-}
 \description{
 Calculate Standard Error of the Mean
 }

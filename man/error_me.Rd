@@ -2,7 +2,7 @@
 % Please edit documentation in R/errors.R
 \name{error_me}
 \alias{error_me}
-\title{Calculate Margin of Error}
+\title{Calculate Margin of Error at given confidence level}
 \usage{
 error_me(std_error, confidence = 0.95)
 }
@@ -11,12 +11,8 @@ error_me(std_error, confidence = 0.95)
 
 \item{confidence}{numeric: Confidence level (0 < confidence < 1)}
 }
-\value{
-Returns a margin of error value.
-}
 \description{
-Calculates margin of error for a given standard error at a given
-confidence interval.
+Calculate Margin of Error at given confidence level
 }
 \examples{
 # maximum margin of error (proportion) for N=100: 9.8\%
@@ -24,8 +20,7 @@ std_error <- error_se(0.5, 100)
 error_me(std_error)
 }
 \references{
-\url{http://en.wikipedia.org/wiki/Margin_of_error} \cr
-\url{http://en.wikipedia.org/wiki/Standard_error}
+\url{http://en.wikipedia.org/wiki/Margin_of_error}
 }
 \seealso{
 Other functions for estimating sampling error: 
