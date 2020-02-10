@@ -2,10 +2,8 @@ Package: sastats
 Type: Package
 Title: Calculate statistics
 Version: 0.1.0
-Authors@R: c(
-    person("Dan", "Kary", , "Rsoftware@SouthwickAssociates.com", role = c("aut", "cre")),
-    person("Southwick Associates", role = c("cph", "fnd"))
-    )
+Author: Dan Kary
+Maintainer: Dan Kary <dan@southwickassociates.com>
 Description: Pull together some stats useful across projects
 License: Intended for Southwick internal use only
 Encoding: UTF-8
