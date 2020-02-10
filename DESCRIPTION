@@ -1,12 +1,13 @@
 Package: sastats
 Type: Package
 Title: Calculate statistics
-Version: 0.1.0
-Author: Dan Kary
+Version: 0.2.0
+Author: Dan Kary <dan@southwickassociates.com>
 Maintainer: Dan Kary <dan@southwickassociates.com>
 Description: Pull together some stats useful across projects
-License: Intended for Southwick internal use only
-Encoding: UTF-8
-LazyData: FALSE
+License: Southwick-only
+URL: https://github.com/southwick-associates/sastats
 Depends: R (>= 3.5)
+Imports: stats
+Encoding: UTF-8
 RoxygenNote: 7.0.2
