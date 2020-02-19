@@ -23,7 +23,10 @@
 #'     days_cleaned = ifelse(is_outlier, NA, days)
 #' ) %>% ungroup()
 #'
+#' # summarize
 #' outlier_pct(activity, act)
+#' outlier_plot(activity, days, act)
+#' filter(activity, days > 0) %>% outlier_plot(days, act, apply_log = TRUE)
 outlier_tukey <- function(
     x, k = 1.5, ignore_lwr = FALSE, apply_log = FALSE, ignore_zero = FALSE
 ) {
@@ -68,4 +71,27 @@ outlier_pct <- function(df, ...) {
         summarise(n = n()) %>%
         mutate(pct_outliers = .data$n / sum(.data$n) * 100) %>%
         filter(.data$is_outlier)
+}
+
+#' Make a plot of distributions with outliers identified
+#'
+#' @inheritParams outlier_pct
+#' @param var Unquoted name of variable to check
+#' @param grp Unquoted name of variable to group by
+#' @family functions for identifying outliers
+#' @export
+#' @examples
+#' # see ?outlier_tukey
+outlier_plot <- function(df, var, grp, apply_log = FALSE) {
+    var <- enquo(var)
+    grp <- enquo(grp)
+    df <- filter(df, !is.na(!! var))
+    cnts <- count(df, !! grp, !! var, .data$is_outlier)
+    p <- df %>%
+        ggplot(aes(!! grp, !! var)) +
+        geom_boxplot(outlier.size = -1) +
+        geom_point(data = cnts, aes(size = .data$n, color = .data$is_outlier)) +
+        scale_color_manual(values = c("gray", "red"))
+    if (apply_log) p <- p + scale_y_log10()
+    p
 }
