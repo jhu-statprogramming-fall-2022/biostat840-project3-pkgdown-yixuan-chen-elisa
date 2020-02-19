@@ -12,6 +12,9 @@ outlier_plot(df, var, grp, apply_log = FALSE)
 \item{var}{Unquoted name of variable to check}
 
 \item{grp}{Unquoted name of variable to group by}
+
+\item{apply_log}{If TRUE, log transform input values prior to applying tukey's
+rule. Useful since distributions often have a log-normal shape (e.g., spending)}
 }
 \description{
 Make a plot of distributions with outliers identified
@@ -21,6 +24,7 @@ Make a plot of distributions with outliers identified
 }
 \seealso{
 Other functions for identifying outliers: 
+\code{\link{outlier_mean_compare}()},
 \code{\link{outlier_pct}()},
 \code{\link{outlier_tukey}()}
 }

@@ -47,11 +47,13 @@ activity <- group_by(svy$act, act) \%>\% mutate(
 
 # summarize
 outlier_pct(activity, act)
+outlier_mean_compare(activity, days, days_cleaned, act)
 outlier_plot(activity, days, act)
 filter(activity, days > 0) \%>\% outlier_plot(days, act, apply_log = TRUE)
 }
 \seealso{
 Other functions for identifying outliers: 
+\code{\link{outlier_mean_compare}()},
 \code{\link{outlier_pct}()},
 \code{\link{outlier_plot}()}
 }

@@ -5,7 +5,7 @@ A Southwick package for useful statistics calculations (particularly with regard
 
 ## Installation
 
-Install from github:
+From the R console:
 
 ```r
 install.packages("remotes")
@@ -14,19 +14,18 @@ remotes::install_github("southwick-associates/sastats")
 
 ## Usage
 
-Currently, there are just a few functions for calculating survey sampling error:
+Will include vignettes:
 
-```r
-# You can view examples for each function
-library(sastats)
-?error_se_prop  # standard error of a proportion
-?error_se_mean  # standard error of mean
-?error_me       # margin of error (for confidence intervals)
-```
+- Outliers (e.g., `?outlier_tukey()`)
+- Sampling Errors (e.g., `error_se_mean()`)
+- (maybe) Survey Weighting
 
-Some additional functions I'm planning to add
+## TODO
 
-- error propagation
-- working with outliers
-- estimating survey weights
-- maybe others
+- add outlier vignette (probably pretty much copy from B4W)
+- short vignette on error estimation
+- survey weighting function (and sample data), probably with short vignette
+
+## Development
+
+See the [R packages book](http://r-pkgs.had.co.nz/) for a guide to package development. The software environment was specified using [package renv](https://rstudio.github.io/renv/index.html). Use `renv::restore()` to build the project library.

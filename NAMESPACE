@@ -3,6 +3,7 @@
 export(error_me)
 export(error_se_mean)
 export(error_se_prop)
+export(outlier_mean_compare)
 export(outlier_pct)
 export(outlier_plot)
 export(outlier_tukey)

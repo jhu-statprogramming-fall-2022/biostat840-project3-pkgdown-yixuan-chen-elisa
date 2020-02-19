@@ -19,6 +19,7 @@ Identify the percentage of values flagged as outliers
 }
 \seealso{
 Other functions for identifying outliers: 
+\code{\link{outlier_mean_compare}()},
 \code{\link{outlier_plot}()},
 \code{\link{outlier_tukey}()}
 }

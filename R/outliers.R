@@ -25,6 +25,7 @@
 #'
 #' # summarize
 #' outlier_pct(activity, act)
+#' outlier_mean_compare(activity, days, days_cleaned, act)
 #' outlier_plot(activity, days, act)
 #' filter(activity, days > 0) %>% outlier_plot(days, act, apply_log = TRUE)
 outlier_tukey <- function(
@@ -73,9 +74,30 @@ outlier_pct <- function(df, ...) {
         filter(.data$is_outlier)
 }
 
+#' Compare averages with (newvar) vs. withoout (oldvar) outliers
+#'
+#' @param df data frame with variables to compare
+#' @param oldvar original variable without outliers removed
+#' @param newvar variable with outliers removed
+#' @inheritParams outlier_pct
+#' @family functions for identifying outliers
+#' @export
+#' @examples
+#' # see ?outlier_tukey
+outlier_mean_compare <- function(df, oldvar, newvar, ...) {
+    oldvar <- enquo(oldvar)
+    newvar <- enquo(newvar)
+    grps <- enquos(...)
+    mean_narm <- function(x) mean(x, na.rm = TRUE)
+    df %>%
+        group_by(!!! grps) %>%
+        summarise_at(vars(!! oldvar, !! newvar), "mean_narm")
+}
+
 #' Make a plot of distributions with outliers identified
 #'
 #' @inheritParams outlier_pct
+#' @inheritParams outlier_tukey
 #' @param var Unquoted name of variable to check
 #' @param grp Unquoted name of variable to group by
 #' @family functions for identifying outliers
