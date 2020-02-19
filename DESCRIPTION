@@ -8,6 +8,8 @@ Description: Pull together some stats useful across projects
 License: Southwick-only
 URL: https://github.com/southwick-associates/sastats
 Depends: R (>= 3.5)
-Imports: stats
+Imports: 
+    dplyr,
+    stats
 Encoding: UTF-8
 RoxygenNote: 7.0.2
