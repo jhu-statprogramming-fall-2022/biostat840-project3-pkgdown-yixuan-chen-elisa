@@ -26,7 +26,7 @@ make outlier identification less strict (& vice-versa)}
 \item{apply_log}{If TRUE, log transform input values prior to applying tukey's
 rule. Useful since distributions often have a log-normal shape (e.g., spending)}
 
-\item{ingnore_zero}{If TRUE, will exclude zero values from IQR & flagging.
+\item{ignore_zero}{If TRUE, will exclude zero values from IQR & flagging.
 Note that zeroes will automatically be ignored if apply_log = TRUE}
 }
 \description{

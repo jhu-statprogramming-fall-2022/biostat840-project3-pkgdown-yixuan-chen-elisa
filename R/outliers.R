@@ -10,7 +10,7 @@
 #' @param ignore_lwr If TRUE, don't use the lower fence for identifying outliers
 #' @param apply_log If TRUE, log transform input values prior to applying tukey's
 #' rule. Useful since distributions often have a log-normal shape (e.g., spending)
-#' @param ingnore_zero If TRUE, will exclude zero values from IQR & flagging.
+#' @param ignore_zero If TRUE, will exclude zero values from IQR & flagging.
 #' Note that zeroes will automatically be ignored if apply_log = TRUE
 #'
 #' @family functions for identifying outliers
