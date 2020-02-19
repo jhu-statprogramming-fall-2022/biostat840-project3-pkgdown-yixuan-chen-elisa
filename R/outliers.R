@@ -18,10 +18,12 @@
 #' @examples
 #' library(dplyr)
 #' data(svy)
-#' act <- group_by(svy$act, act) %>% mutate(
+#' activity <- group_by(svy$act, act) %>% mutate(
 #'     is_outlier = outlier_tukey(days, ignore_zero = TRUE, apply_log = TRUE),
 #'     days_cleaned = ifelse(is_outlier, NA, days)
 #' ) %>% ungroup()
+#'
+#' outlier_pct(activity, act)
 outlier_tukey <- function(
     x, k = 1.5, ignore_lwr = FALSE, apply_log = FALSE, ignore_zero = FALSE
 ) {
@@ -47,4 +49,23 @@ outlier_tukey_top <- function(x, k = 1.5, apply_log = FALSE, ignore_zero = FALSE
     quartiles <- quantile(x, probs = c(0.25, 0.75), na.rm = TRUE)
     iqr <- diff(quartiles)
     exp(quartiles[2] + k * iqr)
+}
+
+# Summarizing -------------------------------------------------------------
+
+#' Identify the percentage of values flagged as outliers
+#'
+#' @param df data frame with outliers identified with df$is_outlier
+#' @param ... optional grouping variables (use unquoted names)
+#' @family functions for identifying outliers
+#' @export
+#' @examples
+#' # see ?outlier_tukey
+outlier_pct <- function(df, ...) {
+    grps <- enquos(...)
+    df %>%
+        group_by(!!! grps, .data$is_outlier) %>%
+        summarise(n = n()) %>%
+        mutate(pct_outliers = .data$n / sum(.data$n) * 100) %>%
+        filter(.data$is_outlier)
 }

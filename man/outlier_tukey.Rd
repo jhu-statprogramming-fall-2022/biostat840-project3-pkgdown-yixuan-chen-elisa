@@ -40,9 +40,15 @@ Returns a logical vector where TRUE indicates outliers.
 \examples{
 library(dplyr)
 data(svy)
-act <- group_by(svy$act, act) \%>\% mutate(
+activity <- group_by(svy$act, act) \%>\% mutate(
     is_outlier = outlier_tukey(days, ignore_zero = TRUE, apply_log = TRUE),
     days_cleaned = ifelse(is_outlier, NA, days)
 ) \%>\% ungroup()
+
+outlier_pct(activity, act)
+}
+\seealso{
+Other functions for identifying outliers: 
+\code{\link{outlier_pct}()}
 }
 \concept{functions for identifying outliers}
