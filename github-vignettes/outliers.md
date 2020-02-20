@@ -32,9 +32,8 @@ glimpse(activities)
 
 Visualizing the data is a good first step. We can use
 `sastats::outlier_plot()` which is largely a wrapper for
-`ggplot2::geom_boxplot()`. The `ignore_zero = TRUE` specification first
-drops respondents who didn’t actually participate (usually what we want
-in profile estimation).
+`ggplot2::geom_boxplot()`. The `ignore_zero = TRUE` specification
+ensures we exclude any respondents who didn’t actually participate.
 
 ``` r
 outlier_plot(activities, days, act, ignore_zero = TRUE)
@@ -75,8 +74,8 @@ outlier_plot(activities, days, act, apply_log = TRUE, show_outliers = TRUE)
 
 ![](outliers_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-We have a couple more summary functions available to show the effects of
-outlier removal:
+We also have a couple summary functions available to demonstrate the
+effects of outlier removal:
 
 ``` r
 outlier_pct(activities, act)
