@@ -1,0 +1,17 @@
+---
+output: github_document
+---
+<!-- .md is generated from .Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Overview
+
+Outliers are something we always need to consider with continuous survey variables. There aren't hard and fast rules for outlier identification, but [Tukey's Test]( https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides one method that is easy to apply in a standard way.
+
+##

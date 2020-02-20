@@ -16,13 +16,15 @@ remotes::install_github("southwick-associates/sastats")
 
 Will include vignettes:
 
-- Outliers (e.g., `?outlier_tukey()`)
+- [Identifying Outliers](github-vignettes/outliers.md)
 - Sampling Errors (e.g., `error_se_mean()`)
 - (maybe) Survey Weighting
 
 ## TODO
 
 - add outlier vignette (probably pretty much copy from B4W)
+    + also example for outlier_tukey_top()
+    + it should probably have it's own documentation as well
 - short vignette on error estimation
 - survey weighting function (and sample data), probably with short vignette
 
