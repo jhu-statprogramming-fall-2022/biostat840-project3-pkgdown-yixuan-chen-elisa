@@ -3,8 +3,9 @@
 
 # Overview
 
-Outliers should be considered with continuous survey variables. There
-are no hard and fast rules for outlier identification, but [Tukey’s
+Outliers should be considered when working with continuous survey
+variables. There are no hard and fast rules for outlier identification,
+but [Tukey’s
 Test](https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides
 one method that is easy to apply in a standard way.
 
@@ -29,14 +30,11 @@ glimpse(activities)
 
 ## Visualize
 
-Visualizing the data is a first step for examining outliers. We can use
-`sastats::outlier_plot()` which is a wrapper for
-`ggplot2::geom_boxplot()`.
-
-After running this function, we can see that the distributions are
-highly skewed and difficult to view. Additionally, the postion of the
-whiskers suggests that we would be flagging many reasonable values as
-outliers (e.g., those above 20 or so for fishing).
+Visualizing the data is a good first step. We can use
+`sastats::outlier_plot()` which is largely a wrapper for
+`ggplot2::geom_boxplot()`. The `ignore_zero = TRUE` specification first
+drops respondents who didn’t actually participate (usually what we want
+in profile estimation).
 
 ``` r
 outlier_plot(activities, days, act, ignore_zero = TRUE)
@@ -44,9 +42,13 @@ outlier_plot(activities, days, act, ignore_zero = TRUE)
 
 ![](outliers_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-An argument is included to allow us to log transform the y-axis. This
-makes for more normal distributions, and likely provides a more
-reasonable criteria for outlier identification.
+After running this function, we can see that the distributions are
+highly skewed and difficult to view. Additionally, the position of the
+whiskers suggests that we would be flagging many reasonable values as
+outliers (e.g., those above 20 or so for fishing).
+
+Log-transforming the y-axis produces more normal distributions, and
+likely provides a more reasonable criteria for outlier identification.
 
 ``` r
 outlier_plot(activities, days, act, apply_log = TRUE)
@@ -119,20 +121,6 @@ activities <- activities %>%
         days_cleaned = ifelse(is_outlier, topcode_value, days)
     ) %>%
     ungroup()
-
-outlier_pct(activities, act)
-#> # A tibble: 8 x 4
-#> # Groups:   act [8]
-#>   act      is_outlier     n pct_outliers
-#>   <chr>    <lgl>      <int>        <dbl>
-#> 1 camp     TRUE           6       0.479 
-#> 2 fish     TRUE           3       0.240 
-#> 3 hunt     TRUE           1       0.0799
-#> 4 picnic   TRUE          15       1.20  
-#> 5 snow     TRUE           2       0.160 
-#> 6 trail    TRUE           4       0.319 
-#> 7 water    TRUE           4       0.319 
-#> 8 wildlife TRUE          13       1.04
 
 outlier_mean_compare(activities, days, days_cleaned, act)
 #> # A tibble: 9 x 3

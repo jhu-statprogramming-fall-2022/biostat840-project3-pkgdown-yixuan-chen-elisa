@@ -47,6 +47,8 @@ outlier_plot(svy$act, days, act, apply_log = TRUE)
 
 activity <- group_by(svy$act, act) \%>\% mutate(
     is_outlier = outlier_tukey(days, ignore_zero = TRUE, apply_log = TRUE),
+    # in case we want to topcode the outliers:
+    topcode_value = outlier_tukey_top(days, apply_log = TRUE),
     days_cleaned = ifelse(is_outlier, NA, days)
 ) \%>\% ungroup()
 
