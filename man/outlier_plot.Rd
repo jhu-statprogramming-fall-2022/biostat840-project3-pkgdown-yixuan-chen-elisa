@@ -7,7 +7,7 @@
 outlier_plot(
   df,
   var,
-  grp,
+  ...,
   apply_log = FALSE,
   show_outliers = FALSE,
   ignore_zero = FALSE
@@ -18,7 +18,7 @@ outlier_plot(
 
 \item{var}{Unquoted name of variable to check}
 
-\item{grp}{Unquoted name of variable to group by}
+\item{...}{optional grouping variables (use unquoted names)}
 
 \item{apply_log}{If TRUE, log transform input values prior to applying tukey's
 rule. Useful since distributions often have a log-normal shape (e.g., spending)}

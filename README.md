@@ -22,9 +22,6 @@ Will include vignettes:
 
 ## TODO
 
-- add outlier vignette (probably pretty much copy from B4W)
-    + also example for outlier_tukey_top()
-    + it should probably have it's own documentation as well
 - short vignette on error estimation
 - survey weighting function (and sample data), probably with short vignette
 
