@@ -15,5 +15,9 @@ svy
 \description{
 Survey sample data
 }
+\seealso{
+Other data: 
+\code{\link{pop}}
+}
 \concept{data}
 \keyword{datasets}

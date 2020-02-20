@@ -9,3 +9,9 @@
 #' }
 #' @family data
 "svy"
+
+#' Survey data for defining a population
+#'
+#' @format A data frame with 877 rows and 4 columns (1 row per respondent)
+#' @family data
+"pop"
