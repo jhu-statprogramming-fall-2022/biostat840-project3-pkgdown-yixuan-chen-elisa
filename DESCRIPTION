@@ -9,9 +9,11 @@ License: Southwick-only
 URL: https://github.com/southwick-associates/sastats
 Depends: R (>= 3.5)
 Imports: 
+    anesrake,
     dplyr,
     ggplot2,
-    stats
+    stats,
+    weights
 Encoding: UTF-8
 LazyData: false
 RoxygenNote: 7.0.2
