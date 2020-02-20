@@ -2,9 +2,16 @@
 % Please edit documentation in R/outliers.R
 \name{outlier_plot}
 \alias{outlier_plot}
-\title{Make a plot of distributions with outliers identified}
+\title{Make boxplots of numberic variable}
 \usage{
-outlier_plot(df, var, grp, apply_log = FALSE)
+outlier_plot(
+  df,
+  var,
+  grp,
+  apply_log = FALSE,
+  show_outliers = FALSE,
+  ignore_zero = FALSE
+)
 }
 \arguments{
 \item{df}{data frame with outliers identified with df$is_outlier}
@@ -15,9 +22,16 @@ outlier_plot(df, var, grp, apply_log = FALSE)
 
 \item{apply_log}{If TRUE, log transform input values prior to applying tukey's
 rule. Useful since distributions often have a log-normal shape (e.g., spending)}
+
+\item{show_outliers}{If TRUE, will identify which values have been flagged
+with df$is_outlier}
+
+\item{ignore_zero}{If TRUE, will exclude zero values from IQR & flagging.
+Note that zeroes will automatically be ignored if apply_log = TRUE}
 }
 \description{
-Make a plot of distributions with outliers identified
+This function can optionally show outliers identifying by df$is_outliers
+if show_outliers = TRUE.
 }
 \examples{
 # see ?outlier_tukey

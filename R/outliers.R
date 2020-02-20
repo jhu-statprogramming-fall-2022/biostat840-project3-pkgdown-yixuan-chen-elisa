@@ -57,6 +57,49 @@ outlier_tukey_top <- function(x, k = 1.5, apply_log = FALSE, ignore_zero = FALSE
 
 # Summarizing -------------------------------------------------------------
 
+
+#' Make boxplots of numberic variable
+#'
+#' This function can optionally show outliers identifying by df$is_outliers
+#' if show_outliers = TRUE.
+#'
+#' @inheritParams outlier_pct
+#' @inheritParams outlier_tukey
+#' @param var Unquoted name of variable to check
+#' @param grp Unquoted name of variable to group by
+#' @param show_outliers If TRUE, will identify which values have been flagged
+#' with df$is_outlier
+#' @family functions for identifying outliers
+#' @export
+#' @examples
+#' # see ?outlier_tukey
+outlier_plot <- function(
+    df, var, grp, apply_log = FALSE, show_outliers = FALSE, ignore_zero = FALSE
+) {
+    var <- enquo(var)
+    grp <- enquo(grp)
+
+    df <- filter(df, !is.na(!! var))
+    if (ignore_zero || apply_log) df <- filter(df, !!var != 0)
+
+    if (show_outliers) {
+        if (!"is_outlier" %in% names(df)) {
+            stop("If show_outliers = TRUE, an is_outlier variable is needed",
+                 call. = FALSE)
+        }
+    } else {
+        df <- mutate(df, is_outlier = "None Identified")
+    }
+    cnts <- count(df, !! grp, !! var, .data$is_outlier)
+    p <- df %>%
+        ggplot(aes(!! grp, !! var)) +
+        geom_boxplot(outlier.size = -1) +
+        geom_point(data = cnts, aes(size = .data$n, color = .data$is_outlier)) +
+        scale_color_manual(values = c("gray", "red"))
+    if (apply_log) p <- p + scale_y_log10()
+    p
+}
+
 #' Identify the percentage of values flagged as outliers
 #'
 #' @param df data frame with outliers identified with df$is_outlier
@@ -94,26 +137,3 @@ outlier_mean_compare <- function(df, oldvar, newvar, ...) {
         summarise_at(vars(!! oldvar, !! newvar), "mean_narm")
 }
 
-#' Make a plot of distributions with outliers identified
-#'
-#' @inheritParams outlier_pct
-#' @inheritParams outlier_tukey
-#' @param var Unquoted name of variable to check
-#' @param grp Unquoted name of variable to group by
-#' @family functions for identifying outliers
-#' @export
-#' @examples
-#' # see ?outlier_tukey
-outlier_plot <- function(df, var, grp, apply_log = FALSE) {
-    var <- enquo(var)
-    grp <- enquo(grp)
-    df <- filter(df, !is.na(!! var))
-    cnts <- count(df, !! grp, !! var, .data$is_outlier)
-    p <- df %>%
-        ggplot(aes(!! grp, !! var)) +
-        geom_boxplot(outlier.size = -1) +
-        geom_point(data = cnts, aes(size = .data$n, color = .data$is_outlier)) +
-        scale_color_manual(values = c("gray", "red"))
-    if (apply_log) p <- p + scale_y_log10()
-    p
-}
