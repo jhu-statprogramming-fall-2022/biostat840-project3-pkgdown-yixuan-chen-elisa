@@ -10,8 +10,31 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r, message = FALSE, include=FALSE}
+library(dplyr)
+library(sastats)
+```
+
 # Overview
 
-Outliers are something we always need to consider with continuous survey variables. There aren't hard and fast rules for outlier identification, but [Tukey's Test]( https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides one method that is easy to apply in a standard way.
+Outliers should be considered with continuous survey variables. There are no hard and fast rules for outlier identification, but [Tukey's Test]( https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides one method that is easy to apply in a standard way.
 
-##
+## Visualize
+
+Visualizing the data is a first step for examining outliers. To demonstrate, package sastats includes a survey dataset with annual participation days for several outdoor recreation activities:
+
+```{r}
+library(dplyr)
+library(sastats)
+
+data(svy)
+activities <- svy$act
+
+glimpse(activities)
+```
+
+We can use 
+```{r}
+
+```
+

@@ -1,7 +1,7 @@
 Package: sastats
 Type: Package
 Title: Calculate statistics
-Version: 0.2.0
+Version: 0.3.0
 Author: Dan Kary <dan@southwickassociates.com>
 Maintainer: Dan Kary <dan@southwickassociates.com>
 Description: Pull together some stats useful across projects.
@@ -13,4 +13,5 @@ Imports:
     ggplot2,
     stats
 Encoding: UTF-8
+LazyData: false
 RoxygenNote: 7.0.2
