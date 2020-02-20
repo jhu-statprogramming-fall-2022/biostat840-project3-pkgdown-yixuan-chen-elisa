@@ -35,7 +35,7 @@
 outlier_tukey <- function(
     x, k = 1.5, ignore_lwr = FALSE, apply_log = FALSE, ignore_zero = FALSE
 ) {
-    if (ignore_zero) x <- ifelse(x == 0, NA, x)
+    if (ignore_zero || apply_log) x <- ifelse(x == 0, NA, x)
     if (apply_log) x <- log(x)
 
     quartiles <- quantile(x, probs = c(0.25, 0.75), na.rm = TRUE)
@@ -52,7 +52,7 @@ outlier_tukey <- function(
 #' @describeIn outlier_tukey get the largest non-outlier value for top-coding
 #' @export
 outlier_tukey_top <- function(x, k = 1.5, apply_log = FALSE, ignore_zero = FALSE) {
-    if (ignore_zero) x <- ifelse(x == 0, NA, x)
+    if (ignore_zero || apply_log) x <- ifelse(x == 0, NA, x)
     if (apply_log) x <- log(x)
     quartiles <- quantile(x, probs = c(0.25, 0.75), na.rm = TRUE)
     iqr <- diff(quartiles)
@@ -60,7 +60,6 @@ outlier_tukey_top <- function(x, k = 1.5, apply_log = FALSE, ignore_zero = FALSE
 }
 
 # Summarizing -------------------------------------------------------------
-
 
 #' Make boxplots of numberic variable
 #'

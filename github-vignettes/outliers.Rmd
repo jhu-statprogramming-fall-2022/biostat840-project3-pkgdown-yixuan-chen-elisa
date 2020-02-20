@@ -33,10 +33,10 @@ activities <- svy$act
 glimpse(activities)
 ```
 
-We can use `sastats::outlier_plot()` which is a wrapper for `ggplot2::geom_boxplot()`. However, the distributions are highly skewed and difficult to view. Additionally, the postion of the whiskers suggests that we would be flagging many reasonable values as outliers (e.g., those above 50 or so for biking).
+We can use `sastats::outlier_plot()` which is a wrapper for `ggplot2::geom_boxplot()`. However, the distributions are highly skewed and difficult to view. Additionally, the postion of the whiskers suggests that we would be flagging many reasonable values as outliers (e.g., those above 20 or so for fishing).
 
 ```{r}
-outlier_plot(activities, days, act)
+outlier_plot(activities, days, act, ignore_zero = TRUE)
 ```
 
 An argument is included to allow us to log transform the y-axis. This makes for more normal distributions, and likely provides a more reasonable criteria for outlier identification.
@@ -46,3 +46,44 @@ outlier_plot(activities, days, act, apply_log = TRUE)
 ```
 
 ## Flag Outliers
+
+We can use `outlier_tukey()` to flag those values observed to be outliers:
+
+```{r}
+activities <- activities %>%
+    group_by(act) %>% 
+    mutate(
+        is_outlier = outlier_tukey(days, apply_log = TRUE), 
+        days_cleaned = ifelse(is_outlier, NA, days) 
+    ) %>% 
+    ungroup()
+
+outlier_plot(activities, days, act, apply_log = TRUE, show_outliers = TRUE)
+```
+
+We have a couple more summary functions available to show the effects of outlier removal:
+
+```{r}
+outlier_pct(activities, act)
+
+outlier_mean_compare(activities, days, days_cleaned, act) 
+```
+
+### Topcode
+
+Instead of removing outliers, we could use `outlier_tukey_top()` to topcode:
+
+```{r}
+activities <- activities %>%
+    group_by(act) %>%
+    mutate(
+        topcode_value = outlier_tukey_top(days, apply_log = TRUE),
+        days_cleaned = ifelse(is_outlier, topcode_value, days)
+    ) %>%
+    ungroup()
+
+outlier_pct(activities, act)
+
+outlier_mean_compare(activities, days, days_cleaned, act)
+```
+

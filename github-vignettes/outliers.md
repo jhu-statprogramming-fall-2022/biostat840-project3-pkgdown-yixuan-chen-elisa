@@ -34,10 +34,10 @@ We can use `sastats::outlier_plot()` which is a wrapper for
 `ggplot2::geom_boxplot()`. However, the distributions are highly skewed
 and difficult to view. Additionally, the postion of the whiskers
 suggests that we would be flagging many reasonable values as outliers
-(e.g., those above 50 or so for biking).
+(e.g., those above 20 or so for fishing).
 
 ``` r
-outlier_plot(activities, days, act)
+outlier_plot(activities, days, act, ignore_zero = TRUE)
 ```
 
 ![](outliers_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
@@ -53,3 +53,48 @@ outlier_plot(activities, days, act, apply_log = TRUE)
 ![](outliers_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ## Flag Outliers
+
+We can use `outlier_tukey()` to flag those values observed to be
+outliers:
+
+``` r
+activities <- activities %>%
+    group_by(act) %>% 
+    mutate(
+        is_outlier = outlier_tukey(days, apply_log = TRUE), 
+        days_cleaned = ifelse(is_outlier, NA, days) 
+    ) %>% 
+    ungroup()
+
+outlier_plot(activities, days, act, apply_log = TRUE, show_outliers = TRUE)
+```
+
+![](outliers_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+We have a couple more summary functions to show the effects of outliers
+removal:
+
+``` r
+outlier_pct(activities, act)
+#> # A tibble: 9 x 4
+#> # Groups:   act [9]
+#>   act      is_outlier     n pct_outliers
+#>   <chr>    <lgl>      <int>        <dbl>
+#> 1 bike     TRUE           4        0.319
+#> 2 camp     TRUE           8        0.639
+#> 3 fish     TRUE           9        0.719
+#> 4 hunt     TRUE           3        0.240
+#> 5 picnic   TRUE          26        2.08 
+#> 6 snow     TRUE           4        0.319
+#> 7 trail    TRUE           7        0.559
+#> 8 water    TRUE           9        0.719
+#> 9 wildlife TRUE          24        1.92
+
+outlier_mean_compare(activities, days, days_cleaned)
+#> # A tibble: 1 x 2
+#>    days days_cleaned
+#>   <dbl>        <dbl>
+#> 1  19.1         15.8
+```
+
+### Topcode
