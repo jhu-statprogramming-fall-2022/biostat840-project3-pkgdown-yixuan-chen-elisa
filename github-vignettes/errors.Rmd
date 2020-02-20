@@ -23,7 +23,7 @@ Package sastats includes a few convenience functions for estimating survey sampl
 - standard error of a proportion
 - margin of error
 
-Note that these calculations don't include a "design effect" factor (relevant for weights here) and they probably should. The [package survey](https://cran.r-project.org/web/packages/survey/index.html) has been around for a while and it can be used to estimate design effects.
+Note that [package survey](https://cran.r-project.org/web/packages/survey/index.html) provides a much more comprehensive approach to survey-based calculations (errors, weighting, etc.), but I haven't used it.
 
 #### Sample Data
 
@@ -69,10 +69,11 @@ rate
 
 ## Margin of Error
 
-These are useful for reporting confidence intervals.
+These are useful for reporting confidence intervals. Note that the weighting that was done to this dataset produces a "design effect" that inflates the margin of error. I know the design effect is 1.15 for this dataset (from the `rake_weight()` procedure):
 
 ```{r}
-mutate(rate, me = error_me(se))
+deff <- 1.15
+mutate(rate, me = error_me(se) * deff)
 
-mutate(days, me = error_me(se))
+mutate(days, me = error_me(se) * deff)
 ```

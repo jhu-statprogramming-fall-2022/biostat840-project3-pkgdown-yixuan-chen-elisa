@@ -14,11 +14,13 @@ remotes::install_github("southwick-associates/sastats")
 
 ## Usage
 
-Will include vignettes:
+See the vignettes:
 
 - [Identifying Outliers](github-vignettes/outliers.md)
 - [Survey Sampling Errors](github-vignettes/errors.md)
-- TODO: [Survey Rake Weighting](github-vignettes/weights.md)
+- [Survey Rake Weighting](github-vignettes/weight.md)
+
+Note that this package doesn't implement error propagation. The [errors package](https://github.com/r-quantities/errors) looks promising in this regard, although I haven't tried it yet.
 
 ## Development
 

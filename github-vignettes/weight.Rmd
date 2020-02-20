@@ -58,7 +58,7 @@ pop_target <- sapply(wtvars, function(x) weights::wpct(pop[[x]], pop$stwt))
 pop_target
 ```
 
-This also provides a convenient method to compare to the survey dataset to be weighted:
+This also provides a convenient method to compare to the survey dataset to be weighted. Notice that the formats between this list and the previous match exactly (i.e., same variable names and factor levels); this is a requirement for rake weighting.
 
 ```{r}
 sapply(wtvars, function(x) weights::wpct(svy[[x]]))
@@ -66,7 +66,7 @@ sapply(wtvars, function(x) weights::wpct(svy[[x]]))
 
 ## Rake Weighting
 
-We can now run the rake weighting procedure:
+We can now run the rake weighting procedure. A summary will be printed  with some useful statistics (including design effect).
 
 ```{r}
 svy <- rake_weight(svy, pop_target, "Vrid")
