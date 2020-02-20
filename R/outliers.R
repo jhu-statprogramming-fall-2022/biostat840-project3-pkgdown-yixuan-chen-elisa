@@ -18,16 +18,20 @@
 #' @examples
 #' library(dplyr)
 #' data(svy)
+#'
+#' # take a look at the days variable
+#' outlier_plot(svy$act, days, act)
+#' outlier_plot(svy$act, days, act, apply_log = TRUE)
+#'
 #' activity <- group_by(svy$act, act) %>% mutate(
 #'     is_outlier = outlier_tukey(days, ignore_zero = TRUE, apply_log = TRUE),
 #'     days_cleaned = ifelse(is_outlier, NA, days)
 #' ) %>% ungroup()
 #'
 #' # summarize
+#' outlier_plot(activity, days, act, apply_log = TRUE, show_outliers = TRUE)
 #' outlier_pct(activity, act)
 #' outlier_mean_compare(activity, days, days_cleaned, act)
-#' outlier_plot(activity, days, act)
-#' filter(activity, days > 0) %>% outlier_plot(days, act, apply_log = TRUE)
 outlier_tukey <- function(
     x, k = 1.5, ignore_lwr = FALSE, apply_log = FALSE, ignore_zero = FALSE
 ) {
@@ -94,7 +98,7 @@ outlier_plot <- function(
     p <- df %>%
         ggplot(aes(!! grp, !! var)) +
         geom_boxplot(outlier.size = -1) +
-        geom_point(data = cnts, aes(size = .data$n, color = .data$is_outlier)) +
+        geom_point(data = cnts, aes_string(size = "n", color = "is_outlier")) +
         scale_color_manual(values = c("gray", "red"))
     if (apply_log) p <- p + scale_y_log10()
     p

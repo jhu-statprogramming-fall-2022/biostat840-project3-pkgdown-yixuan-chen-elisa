@@ -40,16 +40,20 @@ Returns a logical vector where TRUE indicates outliers.
 \examples{
 library(dplyr)
 data(svy)
+
+# take a look at the days variable
+outlier_plot(svy$act, days, act)
+outlier_plot(svy$act, days, act, apply_log = TRUE)
+
 activity <- group_by(svy$act, act) \%>\% mutate(
     is_outlier = outlier_tukey(days, ignore_zero = TRUE, apply_log = TRUE),
     days_cleaned = ifelse(is_outlier, NA, days)
 ) \%>\% ungroup()
 
 # summarize
+outlier_plot(activity, days, act, apply_log = TRUE, show_outliers = TRUE)
 outlier_pct(activity, act)
 outlier_mean_compare(activity, days, days_cleaned, act)
-outlier_plot(activity, days, act)
-filter(activity, days > 0) \%>\% outlier_plot(days, act, apply_log = TRUE)
 }
 \seealso{
 Other functions for identifying outliers: 
