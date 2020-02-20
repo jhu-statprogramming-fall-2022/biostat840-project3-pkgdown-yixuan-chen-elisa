@@ -33,8 +33,16 @@ activities <- svy$act
 glimpse(activities)
 ```
 
-We can use 
-```{r}
+We can use `sastats::outlier_plot()` which is a wrapper for `ggplot2::geom_boxplot()`. However, the distributions are highly skewed and difficult to view. Additionally, the postion of the whiskers suggests that we would be flagging many reasonable values as outliers (e.g., those above 50 or so for biking).
 
+```{r}
+outlier_plot(activities, days, act)
 ```
 
+An argument is included to allow us to log transform the y-axis. This makes for more normal distributions, and likely provides a more reasonable criteria for outlier identification.
+
+```{r}
+outlier_plot(activities, days, act, apply_log = TRUE)
+```
+
+## Flag Outliers

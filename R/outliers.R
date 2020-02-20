@@ -97,8 +97,8 @@ outlier_plot <- function(
     cnts <- count(df, !! grp, !! var, .data$is_outlier)
     p <- df %>%
         ggplot(aes(!! grp, !! var)) +
-        geom_boxplot(outlier.size = -1) +
         geom_point(data = cnts, aes_string(size = "n", color = "is_outlier")) +
+        geom_boxplot(outlier.size = -1) +
         scale_color_manual(values = c("gray", "red"))
     if (apply_log) p <- p + scale_y_log10()
     p

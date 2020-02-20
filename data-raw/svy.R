@@ -1,7 +1,6 @@
 ## code to prepare `svy` dataset goes here
 
 library(dplyr)
-library(haven) # to remove SPSS labels
 
 # get survey data
 svy <- readRDS("../../B4W-19-01/data/interim/svy-demo.rds")
