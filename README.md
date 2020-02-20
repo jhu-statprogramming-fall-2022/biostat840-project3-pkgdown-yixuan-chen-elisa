@@ -17,13 +17,8 @@ remotes::install_github("southwick-associates/sastats")
 Will include vignettes:
 
 - [Identifying Outliers](github-vignettes/outliers.md)
-- Sampling Errors (e.g., `error_se_mean()`)
-- (maybe) Survey Weighting
-
-## TODO
-
-- short vignette on error estimation
-- survey weighting function (and sample data), probably with short vignette
+- [Survey Sampling Errors](github-vignettes/errors.md)
+- TODO: [Survey Rake Weighting](github-vignettes/weights.md)
 
 ## Development
 

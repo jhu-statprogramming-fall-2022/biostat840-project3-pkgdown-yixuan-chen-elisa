@@ -17,9 +17,15 @@ library(sastats)
 
 # Overview
 
-Package sastats includes a few convenience functions for estimating standard errors. This is typically in the context of survey sampling error. These are very simple computations, and the functions are just thin wrappers for a bit of code.
+Package sastats includes a few convenience functions for estimating survey sampling errors. These are simple computations, and the functions are just thin wrappers for a bit of code. Relevant measures:
 
-Using sample survey data:
+- standard error of the mean
+- standard error of a proportion
+- margin of error
+
+Note that these calculations don't include a "design effect" factor (relevant for weights here) and they probably should. The [package survey](https://cran.r-project.org/web/packages/survey/index.html) has been around for a while and it can be used to estimate design effects.
+
+#### Sample Data
 
 ```{r}
 library(dplyr)
@@ -30,36 +36,43 @@ activity <- left_join(svy$act, select(svy$person, Vrid, weight), by = "Vrid")
 glimpse(activity)
 ```
 
-## Proportion
+## SE Mean
+
+Looking at days of participation:
+
+```{r}
+days <- activity %>%
+    group_by(act) %>% 
+    summarise(
+        avgdays = weighted.mean(days, weight, na.rm = TRUE),
+        se = error_se_mean(days, na.rm = TRUE)
+)
+days
+```
+
+## SE Proportion
 
 Looking at participation rate:
 
 ```{r}
-
+rate <- activity %>%
+    group_by(act, part) %>%
+    summarise(n = n(), wtn = sum(weight)) %>%
+    mutate(
+        n = sum(n), 
+        rate = wtn / sum(wtn),
+        se = error_se_prop(rate, n)
+    ) %>%
+    filter(part == "Checked")
+rate
 ```
 
-#### Computation
+## Margin of Error
+
+These are useful for reporting confidence intervals.
 
 ```{r}
-error_se_prop
+mutate(rate, me = error_me(se))
+
+mutate(days, me = error_me(se))
 ```
-
-## Mean
-
-Looking at days or participation:
-
-```{r}
-activity %>%
-    group_by(act) %>% 
-    summarise(
-        avgdays = mean(days, na.rm = TRUE),
-        se = error_se_mean(days, na.rm = TRUE)
-)
-```
-
-#### Computation
-
-```{r}
-error_se_mean
-```
-
