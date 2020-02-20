@@ -1,0 +1,74 @@
+---
+output: github_document
+---
+<!-- .md is generated from .Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, message = FALSE, include=FALSE}
+library(dplyr)
+library(sastats)
+```
+
+# Overview
+
+Rake weighting in R is fairly straightforward using [package anesrake](). The key aspect is getting the two input datasets into the right format:
+
+- The **target population dataset** needs to be a named list (one element per demographic variable) of target distributions. The `weights::wpct()` function helps with this.
+
+- The **survey dataset** needs to be a data frame with a unique ID variable (e.g., Vrid), and one variable for each demographic measure.
+
+Importantly, demographic variables must be stored either as factors (or numerics) and these much match between the two datasets. This is probably confusing, but the examples below should help illustrate. There is also an AS/HS implementation on Github: [rakewt-ashs](https://github.com/southwick-associates/rakewt-ashs).
+
+#### Sample Data
+
+
+```{r}
+library(dplyr)
+library(sastats)
+
+data(svy, pop)
+svy <- select(svy$person, -weight)
+
+# survey to be weighted
+glimpse(svy)
+
+# target population (outdoor recreationists) from a genpop survey
+glimpse(pop)
+```
+
+## Population Distributions
+
+The easiest way to see the format needed for the target population is to run `weights::wpct()` on a demographic variable. In this example, we are defining the target population (outdoor recreationists) using another general population survey dataset. The genpop distribution for age can be readily pulled from the pop dataset, although we need to ensure we use the `stwt` variable from that survey:
+
+```{r}
+weights::wpct(pop$age_weight, pop$stwt)
+```
+
+The `weights::wpct()` function returns a vector though, and we need a list (and one which includes all the demographic variables of interest):
+
+```{r}
+wtvars <- setdiff(names(pop), "stwt")
+pop_target <- sapply(wtvars, function(x) weights::wpct(pop[[x]], pop$stwt))
+pop_target
+```
+
+This also provides a convenient method to compare to the survey dataset to be weighted:
+
+```{r}
+sapply(wtvars, function(x) weights::wpct(svy[[x]]))
+```
+
+## Rake Weighting
+
+We can now run the rake weighting procedure:
+
+```{r}
+svy <- rake_weight(svy, pop_target, "Vrid")
+```
+
