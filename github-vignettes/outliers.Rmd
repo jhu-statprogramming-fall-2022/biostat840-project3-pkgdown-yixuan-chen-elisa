@@ -19,21 +19,23 @@ library(sastats)
 
 Outliers should be considered with continuous survey variables. There are no hard and fast rules for outlier identification, but [Tukey's Test]( https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides one method that is easy to apply in a standard way.
 
-## Visualize
-
-Visualizing the data is a first step for examining outliers. To demonstrate, package sastats includes a survey dataset with annual participation days for several outdoor recreation activities:
+For demonstration, package sastats includes a survey dataset with annual participation days for several outdoor recreation activities:
 
 ```{r}
 library(dplyr)
 library(sastats)
 
-data(svy)
+data(svy) # list with 2 data frames: person, act
 activities <- svy$act
 
 glimpse(activities)
 ```
 
-We can use `sastats::outlier_plot()` which is a wrapper for `ggplot2::geom_boxplot()`. However, the distributions are highly skewed and difficult to view. Additionally, the postion of the whiskers suggests that we would be flagging many reasonable values as outliers (e.g., those above 20 or so for fishing).
+## Visualize
+
+Visualizing the data is a first step for examining outliers. We can use `sastats::outlier_plot()` which is largely a wrapper for `ggplot2::geom_boxplot()`. 
+
+After running this function, we can see that the distributions are highly skewed and difficult to view. Additionally, the position of the whiskers suggests that we would be flagging many reasonable values as outliers (e.g., those above 20 or so for fishing).
 
 ```{r}
 outlier_plot(activities, days, act, ignore_zero = TRUE)

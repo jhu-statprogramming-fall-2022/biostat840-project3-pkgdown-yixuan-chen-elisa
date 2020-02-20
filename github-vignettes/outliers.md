@@ -8,17 +8,14 @@ are no hard and fast rules for outlier identification, but [Tukey’s
 Test](https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides
 one method that is easy to apply in a standard way.
 
-## Visualize
-
-Visualizing the data is a first step for examining outliers. To
-demonstrate, package sastats includes a survey dataset with annual
+For demonstration, package sastats includes a survey dataset with annual
 participation days for several outdoor recreation activities:
 
 ``` r
 library(dplyr)
 library(sastats)
 
-data(svy)
+data(svy) # list with 2 data frames: person, act
 activities <- svy$act
 
 glimpse(activities)
@@ -30,11 +27,16 @@ glimpse(activities)
 #> $ days <dbl> NA, NA, NA, NA, NA, NA, NA, NA, 15, 10, NA, 2, NA, NA, 10, NA,...
 ```
 
-We can use `sastats::outlier_plot()` which is a wrapper for
-`ggplot2::geom_boxplot()`. However, the distributions are highly skewed
-and difficult to view. Additionally, the postion of the whiskers
-suggests that we would be flagging many reasonable values as outliers
-(e.g., those above 20 or so for fishing).
+## Visualize
+
+Visualizing the data is a first step for examining outliers. We can use
+`sastats::outlier_plot()` which is a wrapper for
+`ggplot2::geom_boxplot()`.
+
+After running this function, we can see that the distributions are
+highly skewed and difficult to view. Additionally, the postion of the
+whiskers suggests that we would be flagging many reasonable values as
+outliers (e.g., those above 20 or so for fishing).
 
 ``` r
 outlier_plot(activities, days, act, ignore_zero = TRUE)
@@ -71,30 +73,78 @@ outlier_plot(activities, days, act, apply_log = TRUE, show_outliers = TRUE)
 
 ![](outliers_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-We have a couple more summary functions to show the effects of outliers
-removal:
+We have a couple more summary functions available to show the effects of
+outlier removal:
 
 ``` r
 outlier_pct(activities, act)
-#> # A tibble: 9 x 4
-#> # Groups:   act [9]
+#> # A tibble: 8 x 4
+#> # Groups:   act [8]
 #>   act      is_outlier     n pct_outliers
 #>   <chr>    <lgl>      <int>        <dbl>
-#> 1 bike     TRUE           4        0.319
-#> 2 camp     TRUE           8        0.639
-#> 3 fish     TRUE           9        0.719
-#> 4 hunt     TRUE           3        0.240
-#> 5 picnic   TRUE          26        2.08 
-#> 6 snow     TRUE           4        0.319
-#> 7 trail    TRUE           7        0.559
-#> 8 water    TRUE           9        0.719
-#> 9 wildlife TRUE          24        1.92
+#> 1 camp     TRUE           6       0.479 
+#> 2 fish     TRUE           3       0.240 
+#> 3 hunt     TRUE           1       0.0799
+#> 4 picnic   TRUE          15       1.20  
+#> 5 snow     TRUE           2       0.160 
+#> 6 trail    TRUE           4       0.319 
+#> 7 water    TRUE           4       0.319 
+#> 8 wildlife TRUE          13       1.04
 
-outlier_mean_compare(activities, days, days_cleaned)
-#> # A tibble: 1 x 2
-#>    days days_cleaned
-#>   <dbl>        <dbl>
-#> 1  19.1         15.8
+outlier_mean_compare(activities, days, days_cleaned, act) 
+#> # A tibble: 9 x 3
+#>   act       days days_cleaned
+#>   <chr>    <dbl>        <dbl>
+#> 1 bike     31.6         31.6 
+#> 2 camp     11.2          8.58
+#> 3 fish     11.6          9.40
+#> 4 hunt      9.37         8.34
+#> 5 picnic   17.5         13.1 
+#> 6 snow      9.99         9.29
+#> 7 trail    28.4         25.5 
+#> 8 water    12.4         10.5 
+#> 9 wildlife 30.5         21.8
 ```
 
 ### Topcode
+
+Instead of removing outliers, we could use `outlier_tukey_top()` to
+topcode:
+
+``` r
+activities <- activities %>%
+    group_by(act) %>%
+    mutate(
+        topcode_value = outlier_tukey_top(days, apply_log = TRUE),
+        days_cleaned = ifelse(is_outlier, topcode_value, days)
+    ) %>%
+    ungroup()
+
+outlier_pct(activities, act)
+#> # A tibble: 8 x 4
+#> # Groups:   act [8]
+#>   act      is_outlier     n pct_outliers
+#>   <chr>    <lgl>      <int>        <dbl>
+#> 1 camp     TRUE           6       0.479 
+#> 2 fish     TRUE           3       0.240 
+#> 3 hunt     TRUE           1       0.0799
+#> 4 picnic   TRUE          15       1.20  
+#> 5 snow     TRUE           2       0.160 
+#> 6 trail    TRUE           4       0.319 
+#> 7 water    TRUE           4       0.319 
+#> 8 wildlife TRUE          13       1.04
+
+outlier_mean_compare(activities, days, days_cleaned, act)
+#> # A tibble: 9 x 3
+#>   act       days days_cleaned
+#>   <chr>    <dbl>        <dbl>
+#> 1 bike     31.6         31.6 
+#> 2 camp     11.2          9.30
+#> 3 fish     11.6         10.5 
+#> 4 hunt      9.37         9.05
+#> 5 picnic   17.5         15.8 
+#> 6 snow      9.99         9.91
+#> 7 trail    28.4         28.1 
+#> 8 water    12.4         11.5 
+#> 9 wildlife 30.5         28.6
+```

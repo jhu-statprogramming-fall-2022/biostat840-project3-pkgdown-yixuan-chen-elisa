@@ -91,7 +91,7 @@ outlier_plot <- function(
                  call. = FALSE)
         }
     } else {
-        df <- mutate(df, is_outlier = "None Identified")
+        df <- mutate(df, is_outlier = "Not yet Identified")
     }
     cnts <- count(df, !! grp, !! var, .data$is_outlier)
     p <- df %>%
