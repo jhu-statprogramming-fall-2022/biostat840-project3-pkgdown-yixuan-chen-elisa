@@ -71,6 +71,7 @@ outlier_tukey_top <- function(x, k = 1.5, apply_log = FALSE, ignore_zero = FALSE
 #' @inheritParams outlier_pct
 #' @inheritParams outlier_tukey
 #' @param var Unquoted name of variable to check
+#' @param grp Unquoted name of variable to group by
 #' @param show_outliers If TRUE, will identify which values have been flagged
 #' with df$is_outlier
 #' @family functions for identifying outliers
@@ -78,10 +79,10 @@ outlier_tukey_top <- function(x, k = 1.5, apply_log = FALSE, ignore_zero = FALSE
 #' @examples
 #' # see ?outlier_tukey
 outlier_plot <- function(
-    df, var, ..., apply_log = FALSE, show_outliers = FALSE, ignore_zero = FALSE
+    df, var, grp, apply_log = FALSE, show_outliers = FALSE, ignore_zero = FALSE
 ) {
     var <- enquo(var)
-    grps <- enquos(...)
+    grp <- enquo(grp)
 
     df <- filter(df, !is.na(!! var))
     if (ignore_zero || apply_log) df <- filter(df, !!var != 0)
@@ -94,9 +95,9 @@ outlier_plot <- function(
     } else {
         df <- mutate(df, is_outlier = "Not yet Identified")
     }
-    cnts <- count(df, !!! grps, !! var, .data$is_outlier)
+    cnts <- count(df, !! grp, !! var, .data$is_outlier)
     p <- df %>%
-        ggplot(aes(!!! grps, !! var)) +
+        ggplot(aes(!! grp, !! var)) +
         geom_point(data = cnts, aes_string(size = "n", color = "is_outlier")) +
         geom_boxplot(outlier.size = -1) +
         scale_color_manual(values = c("gray", "red"))
