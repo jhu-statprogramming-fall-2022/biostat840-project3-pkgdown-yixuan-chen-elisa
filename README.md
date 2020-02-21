@@ -20,7 +20,7 @@ See the vignettes:
 - [Survey Sampling Errors](github-vignettes/errors.md)
 - [Survey Rake Weighting](github-vignettes/weight.md)
 
-Note that this package doesn't implement [error propagation](https://en.wikipedia.org/wiki/Propagation_of_uncertainty). The [errors] (https://github.com/r-quantities/errors) package looks promising in this regard, although I haven't tried it yet.
+Note that this package doesn't implement [error propagation](https://en.wikipedia.org/wiki/Propagation_of_uncertainty). The [errors](https://github.com/r-quantities/errors) package looks promising in this regard, although I haven't tried it yet.
 
 ## Development
 
