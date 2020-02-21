@@ -76,7 +76,7 @@ rate
 
 ## Margin of Error
 
-These are useful for reporting confidence intervals. Note that the dataset weighting produces a "design effect" which inflates the margin of error. I know the design effect is 1.15 for this dataset, based on the summary output produced by the `rake_weight()` procedure.
+These are useful for reporting confidence intervals. Note that the dataset weighting produces a "design effect" which inflates the margin of error. I know the design effect is 1.15 for this dataset, based on the summary output produced by the `sastats::rake_weight()` procedure.
 
 ```{r}
 deff <- 1.15
@@ -87,7 +87,7 @@ library(ggplot2)
 ggplot(rate, aes(act, rate)) +
   geom_point() +
   geom_errorbar(aes(ymin = lower, ymax = upper)) +
-  ggtitle("Rate Estimates (with 95% CIs)")
+  ggtitle("Participation Rate Estimates (with 95% CIs)")
 
 ggplot(days, aes(act, avgdays)) +
   geom_point() +

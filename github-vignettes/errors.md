@@ -22,8 +22,8 @@ of survey analysis in R.
 
 Caculating errors for multi-estimate metrics requires [error
 propagation](https://en.wikipedia.org/wiki/Propagation_of_uncertainty)
-(e.g., total days which includes participation rate & average days) . I
-haven’t implemented these computations here, but existing packages
+(e.g., total days which depends on participation rate & average days) .
+I haven’t implemented these computations here, but existing packages
 address this need. Package
 [propagate](https://cran.r-project.org/web/packages/propagate/index.html)
 is one I’ve used, but have found tricky to implement. Package
@@ -112,7 +112,7 @@ rate
 These are useful for reporting confidence intervals. Note that the
 dataset weighting produces a “design effect” which inflates the margin
 of error. I know the design effect is 1.15 for this dataset, based on
-the summary output produced by the `rake_weight()` procedure.
+the summary output produced by the `sastats::rake_weight()` procedure.
 
 ``` r
 deff <- 1.15
@@ -123,7 +123,7 @@ library(ggplot2)
 ggplot(rate, aes(act, rate)) +
   geom_point() +
   geom_errorbar(aes(ymin = lower, ymax = upper)) +
-  ggtitle("Rate Estimates (with 95% CIs)")
+  ggtitle("Participation Rate Estimates (with 95% CIs)")
 ```
 
 ![](errors_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
