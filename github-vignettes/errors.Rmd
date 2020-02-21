@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r, message = FALSE, include=FALSE}
+library(ggplot2)
 library(dplyr)
 library(sastats)
 ```
@@ -19,13 +20,15 @@ library(sastats)
 
 Package sastats includes a few convenience functions for estimating survey sampling errors. These are simple calculations, and the functions are just thin wrappers for a bit of code. Relevant measures:
 
-- standard error of the mean
-- standard error of a proportion
-- margin of error
+- Standard error of the mean
+- Standard error of a proportion
+- Margin of error (for confidence intervals)
 
-Note that [package survey](https://cran.r-project.org/web/packages/survey/index.html) provides a much more comprehensive approach to survey-based calculations (errors, weighting, etc.). I've tended toward the light-weight approach outlined here, but it could be worth looking into if we are doing alot of survey analysis in R.
+### Notes
 
-Another note: Estimating errors for computed metrics requires [error propagation](https://en.wikipedia.org/wiki/Propagation_of_uncertainty). I haven't implemented these computations here, but existing packages address this need. Package  [propagate](https://cran.r-project.org/web/packages/propagate/index.html) is one I've used, but have found tricky to implement. Package  [errors](https://github.com/r-quantities/errors) is newer and appears more straightforward (although I haven't tested it).
+[Package survey](https://cran.r-project.org/web/packages/survey/index.html) provides a much more comprehensive approach to survey-based calculations (errors, weighting, etc.). I've tended toward the light-weight approach outlined here, but it could be worth looking into if we are doing alot of survey analysis in R.
+
+Caculating errors for multi-estimate metrics requires [error propagation](https://en.wikipedia.org/wiki/Propagation_of_uncertainty) (e.g., total days which depends on participation rate & average days) . I haven't implemented these computations here, but existing packages address this need. Package  [propagate](https://cran.r-project.org/web/packages/propagate/index.html) is one I've used, but have found tricky to implement. Package  [errors](https://github.com/r-quantities/errors) is newer and appears more straightforward (although I haven't tested it).
 
 #### Example Data
 
@@ -73,11 +76,21 @@ rate
 
 ## Margin of Error
 
-These are useful for reporting confidence intervals. Note that the weighting that was done to this dataset produces a "design effect" that inflates the margin of error. I know the design effect is 1.15 for this dataset, based on the summary output produced by the `rake_weight()` procedure.
+These are useful for reporting confidence intervals. Note that the dataset weighting produces a "design effect" which inflates the margin of error. I know the design effect is 1.15 for this dataset, based on the summary output produced by the `rake_weight()` procedure.
 
 ```{r}
 deff <- 1.15
-mutate(rate, me = error_me(se) * deff)
+rate <- mutate(rate, me = error_me(se) * deff, lower = rate - me, upper = rate + me)
+days <- mutate(days, me = error_me(se) * deff, lower = avgdays - me, upper = avgdays + me)
 
-mutate(days, me = error_me(se) * deff)
+library(ggplot2)
+ggplot(rate, aes(act, rate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = lower, ymax = upper)) +
+  ggtitle("Rate Estimates (with 95% CIs)")
+
+ggplot(days, aes(act, avgdays)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = lower, ymax = upper)) +
+  ggtitle("Average Days (per participant) Estimates (with 95% CIs)")
 ```

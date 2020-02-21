@@ -7,20 +7,23 @@ Package sastats includes a few convenience functions for estimating
 survey sampling errors. These are simple calculations, and the functions
 are just thin wrappers for a bit of code. Relevant measures:
 
-  - standard error of the mean
-  - standard error of a proportion
-  - margin of error
+  - Standard error of the mean
+  - Standard error of a proportion
+  - Margin of error (for confidence intervals)
 
-Note that [package
+### Notes
+
+[Package
 survey](https://cran.r-project.org/web/packages/survey/index.html)
 provides a much more comprehensive approach to survey-based calculations
 (errors, weighting, etc.). I’ve tended toward the light-weight approach
 outlined here, but it could be worth looking into if we are doing alot
 of survey analysis in R.
 
-Another note: Estimating errors for computed metrics requires [error
-propagation](https://en.wikipedia.org/wiki/Propagation_of_uncertainty).
-I haven’t implemented these computations here, but existing packages
+Caculating errors for multi-estimate metrics requires [error
+propagation](https://en.wikipedia.org/wiki/Propagation_of_uncertainty)
+(e.g., total days which includes participation rate & average days) . I
+haven’t implemented these computations here, but existing packages
 address this need. Package
 [propagate](https://cran.r-project.org/web/packages/propagate/index.html)
 is one I’ve used, but have found tricky to implement. Package
@@ -107,39 +110,30 @@ rate
 ## Margin of Error
 
 These are useful for reporting confidence intervals. Note that the
-weighting that was done to this dataset produces a “design effect” that
-inflates the margin of error. I know the design effect is 1.15 for this
-dataset, based on the summary output produced by the `rake_weight()`
-procedure.
+dataset weighting produces a “design effect” which inflates the margin
+of error. I know the design effect is 1.15 for this dataset, based on
+the summary output produced by the `rake_weight()` procedure.
 
 ``` r
 deff <- 1.15
-mutate(rate, me = error_me(se) * deff)
-#> # A tibble: 9 x 7
-#> # Groups:   act [9]
-#>   act      part        n   wtn  rate      se     me
-#>   <chr>    <chr>   <int> <dbl> <dbl>   <dbl>  <dbl>
-#> 1 bike     Checked  1252  381. 0.304 0.0130  0.0293
-#> 2 camp     Checked  1252  469. 0.375 0.0137  0.0308
-#> 3 fish     Checked  1252  323. 0.258 0.0124  0.0279
-#> 4 hunt     Checked  1252  173. 0.138 0.00976 0.0220
-#> 5 picnic   Checked  1252  870. 0.695 0.0130  0.0293
-#> 6 snow     Checked  1252  309. 0.247 0.0122  0.0275
-#> 7 trail    Checked  1252  452. 0.361 0.0136  0.0306
-#> 8 water    Checked  1252  377. 0.301 0.0130  0.0292
-#> 9 wildlife Checked  1252  484. 0.386 0.0138  0.0310
+rate <- mutate(rate, me = error_me(se) * deff, lower = rate - me, upper = rate + me)
+days <- mutate(days, me = error_me(se) * deff, lower = avgdays - me, upper = avgdays + me)
 
-mutate(days, me = error_me(se) * deff)
-#> # A tibble: 9 x 4
-#>   act      avgdays    se    me
-#>   <chr>      <dbl> <dbl> <dbl>
-#> 1 bike       30.4  2.97   6.70
-#> 2 camp       10.9  1.28   2.88
-#> 3 fish       10.6  1.49   3.35
-#> 4 hunt        8.93 1.41   3.17
-#> 5 picnic     18.6  1.35   3.04
-#> 6 snow        9.60 0.856  1.93
-#> 7 trail      26.9  2.58   5.81
-#> 8 water      11.8  1.24   2.81
-#> 9 wildlife   26.9  2.96   6.68
+library(ggplot2)
+ggplot(rate, aes(act, rate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = lower, ymax = upper)) +
+  ggtitle("Rate Estimates (with 95% CIs)")
 ```
+
+![](errors_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+
+ggplot(days, aes(act, avgdays)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = lower, ymax = upper)) +
+  ggtitle("Average Days (per participant) Estimates (with 95% CIs)")
+```
+
+![](errors_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
