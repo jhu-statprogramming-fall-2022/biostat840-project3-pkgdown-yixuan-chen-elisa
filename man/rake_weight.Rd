@@ -9,9 +9,8 @@ rake_weight(
   pop,
   idvar,
   weightvar = "weight",
+  return_stats = TRUE,
   print_name = "",
-  cap = 20,
-  force1 = TRUE,
   ...
 )
 }
@@ -25,33 +24,37 @@ variables.}
 
 \item{weightvar}{name of output weight variable}
 
+\item{return_stats}{If TRUE, the function will instead return a list with 2
+elements: (1) the survey data frame with a new weight variable, and (2) the
+object returned directly by anesrake(). This is helpful if you want to later
+pull elements such as design effect for confidence interval calculations.}
+
 \item{print_name}{header to print in summary (useful for log output)}
-
-\item{cap}{cap argument of anesrake()}
-
-\item{force1}{force1 argument of anesrake()}
 
 \item{...}{other arguments passed to anesrake()}
 }
 \description{
-This is a thin wrapper for \code{\link[anesrake]{anesrake}}. It prints a
-summary and returns the survey dataset with a rake_wt variable appended.
+This is a thin wrapper for \code{\link[anesrake]{anesrake}}. If return_stats =
+TRUE, it returns a list with (1) a survey dataset and (2) the anesrake() object.
+Otherwise, it prints a summary and returns just the survey dataset with a
+weight variable appended.
 }
 \examples{
-library(weights)
 data(svy, pop)
 svy <- svy$person
 
 # determine target weight values
 # the population is determined by a survey dataset which is itself weighted
 wtvars <- c("age_weight", "income_weight", "race_weight")
-pop_target <- sapply(wtvars, function(x) wpct(pop[[x]], pop$stwt))
+pop_target <- sapply(wtvars, function(x) weights::wpct(pop[[x]], pop$stwt))
 
 # compare distributions for survey and population
 pop_target
-sapply(wtvars, function(x) wpct(svy[[x]]))
+sapply(wtvars, function(x) weights::wpct(svy[[x]]))
 
 # run weighting
-svy <- rake_weight(svy, pop_target, "Vrid")
-sapply(wtvars, function(x) wpct(svy[[x]], svy$weight))
+svy_wts <- rake_weight(svy, pop_target, "Vrid")
+svy <- svy_wts$svy
+sapply(wtvars, function(x) weights::wpct(svy[[x]], svy$weight))
+summary(svy_wts$wts)
 }
