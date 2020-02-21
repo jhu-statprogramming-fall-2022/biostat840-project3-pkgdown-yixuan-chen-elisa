@@ -23,7 +23,7 @@ Rake weighting in R is fairly straightforward using [package anesrake](https://c
 
 - The **survey dataset** needs to be a data frame with a unique ID variable (e.g., Vrid), and one variable for each demographic measure.
 
-Importantly, demographic variables must be stored either as factors (or numerics) and these much match between the two datasets. This is probably confusing, but the examples below should help illustrate. There is also an AS/HS implementation on Github: [rakewt-ashs](https://github.com/southwick-associates/rakewt-ashs).
+Importantly, demographic variables must be stored either as factors (or numerics) and these much match between the two datasets. This is probably confusing, but the examples below should help illustrate. You can also see production examples for [B4W-19-10](https://github.com/southwick-associates/B4W-19-01/blob/master/code/svy/6-weight.R) and AS/HS: [rakewt-ashs](https://github.com/southwick-associates/rakewt-ashs).
 
 #### Example Data
 
