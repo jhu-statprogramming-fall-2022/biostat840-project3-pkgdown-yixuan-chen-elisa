@@ -17,7 +17,7 @@ suspicious <- filter(flags, flag >= 4)
 svy <- lapply(svy, function(df) anti_join(df, suspicious, by = "Vrid"))
 
 # reduce the scope of the data a bit
-svy$person <- select(svy$person, Vrid, age_weight:race_weight, weight)
+svy$person <- select(svy$person, Vrid, sex, age_weight:race_weight, weight)
 svy$act <- filter(svy$act, is_targeted) %>%
     select(Vrid, act, part, days)
 svy$basin <- NULL

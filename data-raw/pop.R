@@ -4,6 +4,6 @@ library(dplyr)
 
 pop <- readRDS("../../B4W-19-01/data/interim/oia-co.rds") %>%
     filter(in_co_pop) %>%
-    select(age_weight:race_weight, stwt)
+    select(sex, age_weight:race_weight, stwt)
 
-usethis::use_data(pop)
+usethis::use_data(pop, overwrite = TRUE)
