@@ -119,15 +119,27 @@ sapply(wtvars, function(x) weights::wpct(svy[[x]]))
 
 ## Rake Weighting
 
-We can now run the rake weighting procedure. A summary will be printed
-with some useful statistics (including design effect).
+We can now run the rake weighting procedure. By default, `rake_weight()`
+returns a list of 2 elements: (1) the survey dataset with the weight
+variable appended, and (2) the `anesrake()` return object, which
+includes a bunch of useful summary statistics (including “design
+effect”, which may be useful for estimating confidence intervals).
 
 ``` r
-svy <- rake_weight(svy, pop_target, "Vrid")
+svy_wts <- rake_weight(svy, pop_target, "Vrid")
 #> [1] "Raking converged in 20 iterations"
-#> 
-#> Weight Summary for  -----------------------------
-#> 
+
+svy <- svy_wts$svy
+summary(svy$weight)
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>   0.441   0.721   1.000   1.000   1.161   2.227
+
+wt_summary <- summary(svy_wts$wts)
+deff <- wt_summary$general.design.effect
+deff
+#> [1] 1.146602
+
+wt_summary
 #> $convergence
 #> [1] "Complete convergence was achieved after 20 iterations"
 #> 
