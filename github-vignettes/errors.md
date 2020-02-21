@@ -30,7 +30,7 @@ is one I’ve used, but have found tricky to implement. Package
 [errors](https://github.com/r-quantities/errors) is newer and appears
 more straightforward (although I haven’t tested it).
 
-#### Example Data
+### Example Data
 
 For demonstration, package sastats includes a survey dataset with annual
 participation metrics for 9 outdoor recreation activities:
