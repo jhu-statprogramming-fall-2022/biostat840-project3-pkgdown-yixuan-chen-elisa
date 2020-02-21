@@ -9,10 +9,12 @@ but [Tukey’s
 Test](https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides
 one method that is easy to apply in a standard way. You can view a
 production example for
-[B4W-19-01](https://github.com/southwick-associates/B4W-19-01/blob/master/code/svy/7-recode-outliers.R)
+[B4W-19-01](https://github.com/southwick-associates/B4W-19-01/blob/master/code/svy/7-recode-outliers.R).
+
+#### Example Data
 
 For demonstration, package sastats includes a survey dataset with annual
-participation days for several outdoor recreation activities:
+participation metrics for 9 outdoor recreation activities:
 
 ``` r
 library(dplyr)
@@ -48,8 +50,10 @@ highly skewed and difficult to view. Additionally, the position of the
 whiskers suggests that we would be flagging many reasonable values as
 outliers (e.g., those above 20 or so for fishing).
 
-Log-transforming the y-axis produces more normal distributions, and
-likely provides a more reasonable criteria for outlier identification.
+Log-transforming the y-axis (`apply_log = TRUE`) produces more normal
+distributions, and likely provides a more reasonable criteria for
+outlier identification. Note that we don’t need to supply `ignore_zero =
+TRUE` since `log(0)` is undefined.
 
 ``` r
 outlier_plot(activities, days, act, apply_log = TRUE)
@@ -112,7 +116,7 @@ outlier_mean_compare(activities, days, days_cleaned, act)
 ### Topcode
 
 Instead of removing outliers, we could use `outlier_tukey_top()` to
-topcode:
+identify the topcode value and then recode accordingly:
 
 ``` r
 activities <- activities %>%

@@ -17,7 +17,7 @@ library(sastats)
 
 # Overview
 
-Rake weighting in R is fairly straightforward using [package anesrake](). The key aspect is getting the two input datasets into the right format:
+Rake weighting in R is fairly straightforward using [package anesrake](https://cran.r-project.org/web/packages/anesrake/index.html). The key aspect is getting the two input datasets into the right format:
 
 - The **target population dataset** needs to be a named list (one element per demographic variable) of target distributions. The `weights::wpct()` function helps with this.
 
@@ -25,8 +25,9 @@ Rake weighting in R is fairly straightforward using [package anesrake](). The ke
 
 Importantly, demographic variables must be stored either as factors (or numerics) and these much match between the two datasets. This is probably confusing, but the examples below should help illustrate. There is also an AS/HS implementation on Github: [rakewt-ashs](https://github.com/southwick-associates/rakewt-ashs).
 
-#### Sample Data
+#### Example Data
 
+For demonstration, package sastats includes survey and population datasets which include several demographic variables:
 
 ```{r}
 library(dplyr)
@@ -42,6 +43,14 @@ glimpse(svy)
 glimpse(pop)
 ```
 
+Importantly, the demographic variables have been encoded in the same way for the 2 datasets (as factors in this case):
+
+```{r}
+wtvars <- setdiff(names(svy), "Vrid")
+
+sapply(wtvars, function(x) all(levels(svy[[x]]) == levels(pop[[x]])))
+```
+
 ## Population Distributions
 
 The easiest way to see the format needed for the target population is to run `weights::wpct()` on a demographic variable. In this example, we are defining the target population (outdoor recreationists) using another general population survey dataset. The genpop distribution for age can be readily pulled from the pop dataset, although we need to ensure we use the `stwt` variable from that survey:
@@ -50,15 +59,14 @@ The easiest way to see the format needed for the target population is to run `we
 weights::wpct(pop$age_weight, pop$stwt)
 ```
 
-The `weights::wpct()` function returns a vector though, and we need a list (and one which includes all the demographic variables of interest):
+The `weights::wpct()` function returns a vector, but we need a list of vectors (one element per demographic variables of interest). A straightforward method involves looping over the demographic variables with `sapply()`:
 
 ```{r}
-wtvars <- setdiff(names(pop), "stwt")
-pop_target <- sapply(wtvars, function(x) weights::wpct(pop[[x]], pop$stwt))
+pop_target <- sapply(wtvars, function(x) weights::wpct(pop[[x]], pop[["stwt"]]))
 pop_target
 ```
 
-This also provides a convenient method to compare to the survey dataset to be weighted. Notice that the formats between this list and the previous match exactly (i.e., same variable names and factor levels); this is a requirement for rake weighting.
+This also provides a convenient method for comparison with the survey dataset to be weighted:
 
 ```{r}
 sapply(wtvars, function(x) weights::wpct(svy[[x]]))

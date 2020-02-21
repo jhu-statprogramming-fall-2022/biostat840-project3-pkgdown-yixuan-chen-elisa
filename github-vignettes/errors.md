@@ -4,7 +4,7 @@
 # Overview
 
 Package sastats includes a few convenience functions for estimating
-survey sampling errors. These are simple computations, and the functions
+survey sampling errors. These are simple calculations, and the functions
 are just thin wrappers for a bit of code. Relevant measures:
 
   - standard error of the mean
@@ -14,9 +14,23 @@ are just thin wrappers for a bit of code. Relevant measures:
 Note that [package
 survey](https://cran.r-project.org/web/packages/survey/index.html)
 provides a much more comprehensive approach to survey-based calculations
-(errors, weighting, etc.), but I haven’t used it.
+(errors, weighting, etc.). I’ve tended toward the light-weight approach
+outlined here, but it could be worth looking into if we are doing alot
+of survey analysis in R.
 
-#### Sample Data
+Another note: Estimating errors for computed metrics requires [error
+propagation](https://en.wikipedia.org/wiki/Propagation_of_uncertainty).
+I haven’t implemented these computations here, but existing packages
+address this need. Package
+[propagate](https://cran.r-project.org/web/packages/propagate/index.html)
+is one I’ve used, but have found tricky to implement. Package
+[errors](https://github.com/r-quantities/errors) is newer and appears
+more straightforward (although I haven’t tested it).
+
+#### Example Data
+
+For demonstration, package sastats includes a survey dataset with annual
+participation metrics for 9 outdoor recreation activities:
 
 ``` r
 library(dplyr)
@@ -95,7 +109,8 @@ rate
 These are useful for reporting confidence intervals. Note that the
 weighting that was done to this dataset produces a “design effect” that
 inflates the margin of error. I know the design effect is 1.15 for this
-dataset (from the `rake_weight()` procedure):
+dataset, based on the summary output produced by the `rake_weight()`
+procedure.
 
 ``` r
 deff <- 1.15
