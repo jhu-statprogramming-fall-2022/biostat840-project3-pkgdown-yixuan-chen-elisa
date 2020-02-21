@@ -11,7 +11,7 @@ one method that is easy to apply in a standard way. You can view a
 production example for
 [B4W-19-01](https://github.com/southwick-associates/B4W-19-01/blob/master/code/svy/7-recode-outliers.R).
 
-#### Example Data
+### Example Data
 
 For demonstration, package sastats includes a survey dataset with annual
 participation metrics for 9 outdoor recreation activities:

@@ -23,9 +23,9 @@ Rake weighting in R is fairly straightforward using [package anesrake](https://c
 
 - The **survey dataset** needs to be a data frame with a unique ID variable (e.g., Vrid), and one variable for each demographic measure.
 
-Importantly, demographic variables must be stored either as factors (or numerics) and these much match between the two datasets. This is probably confusing, but the examples below should help illustrate. You can also see production examples for [B4W-19-10](https://github.com/southwick-associates/B4W-19-01/blob/master/code/svy/6-weight.R) and AS/HS: [rakewt-ashs](https://github.com/southwick-associates/rakewt-ashs).
+Importantly, demographic variables must be stored either as factors or numerics and the category coding much match between the two datasets. You can also see production examples for [B4W-19-10](https://github.com/southwick-associates/B4W-19-01/blob/master/code/svy/6-weight.R) and AS/HS: [rakewt-ashs](https://github.com/southwick-associates/rakewt-ashs).
 
-#### Example Data
+### Example Data
 
 For demonstration, package sastats includes survey and population datasets which include several demographic variables:
 
@@ -43,17 +43,22 @@ glimpse(svy)
 glimpse(pop)
 ```
 
-Importantly, the demographic variables have been encoded in the same way for the 2 datasets (as factors in this case):
+Importantly, the demographic variables have been encoded in the same way between the 2 datasets (as factors in this case):
 
 ```{r}
 wtvars <- setdiff(names(svy), "Vrid")
-
 sapply(wtvars, function(x) all(levels(svy[[x]]) == levels(pop[[x]])))
 ```
 
 ## Population Distributions
 
-The easiest way to see the format needed for the target population is to run `weights::wpct()` on a demographic variable. In this example, we are defining the target population (outdoor recreationists) using another general population survey dataset. The genpop distribution for age can be readily pulled from the pop dataset, although we need to ensure we use the `stwt` variable from that survey:
+The easiest way to see the format needed for the target population is to run `weights::wpct()` on a demographic variable:
+
+```{r}
+weights::wpct(svy$age_weight)
+```
+
+For our example, we are defining the target population (outdoor recreationists) using another general population survey dataset. In this case, we need to ensure we use the `stwt` variable from that survey since it was itself weighted:
 
 ```{r}
 weights::wpct(pop$age_weight, pop$stwt)
@@ -66,7 +71,19 @@ pop_target <- sapply(wtvars, function(x) weights::wpct(pop[[x]], pop[["stwt"]]))
 pop_target
 ```
 
-This also provides a convenient method for comparison with the survey dataset to be weighted:
+If we weren't using a reference population dataset, we would need to get the target  distributions into a list in some other way. For example, by hand:
+
+```{r}
+partial_target <- list(
+    "sex" = c("Male" = 0.517, "Female" = 0.483),
+    "age_weight" = c("18-34" = 0.351, "35-54" = 0.349, "55+" = 0.300)
+    # etc.
+)
+partial_target
+```
+
+
+Using `weights::wpct()` also of course provides a convenient method for comparison with the survey dataset to be weighted:
 
 ```{r}
 sapply(wtvars, function(x) weights::wpct(svy[[x]]))

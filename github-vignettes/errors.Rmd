@@ -76,10 +76,10 @@ rate
 
 ## Margin of Error
 
-These are useful for reporting confidence intervals. Note that the dataset weighting produces a "design effect" which inflates the margin of error. I know the design effect is 1.15 for this dataset, based on the summary output produced by the `sastats::rake_weight()` procedure.
+These are useful for reporting confidence intervals. Note that the dataset weighting produces a "design effect" which inflates the margin of error. I know the design effect for this dataset, based on the summary output produced by the `sastats::rake_weight()` procedure.
 
 ```{r}
-deff <- 1.15
+deff <- 1.19
 rate <- mutate(rate, me = error_me(se) * deff, lower = rate - me, upper = rate + me)
 days <- mutate(days, me = error_me(se) * deff, lower = avgdays - me, upper = avgdays + me)
 
