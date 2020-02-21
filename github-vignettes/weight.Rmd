@@ -17,7 +17,7 @@ library(sastats)
 
 # Overview
 
-Rake weighting in R is fairly straightforward using [package anesrake](https://cran.r-project.org/web/packages/anesrake/index.html). The key aspect is getting the two input datasets into the right format:
+Rake weighting in R is fairly straightforward using `anesrake::anesrake()`, for which `sastats::rake_weight()` is a thin wrapper. The key aspect of the process is getting the two input datasets into the right format:
 
 - The **target population dataset** needs to be a named list (one element per demographic variable) of target distributions. The `weights::wpct()` function helps with this.
 

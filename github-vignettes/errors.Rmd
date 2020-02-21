@@ -20,9 +20,9 @@ library(sastats)
 
 Package sastats includes a few convenience functions for estimating survey sampling errors. These are simple calculations, and the functions are just thin wrappers for a bit of code. Relevant measures:
 
-- Standard error of the mean
-- Standard error of a proportion
-- Margin of error (for confidence intervals)
+- Standard error of the mean: `error_se_mean()`
+- Standard error of a proportion: `error_se_prop()`
+- Margin of error (for confidence intervals): `error_me()`
 
 ### Notes
 

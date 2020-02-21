@@ -17,11 +17,17 @@ library(sastats)
 
 # Overview
 
-Outliers should be considered when working with continuous survey variables. There are no hard and fast rules for outlier identification, but [Tukey's Test]( https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides one method that is easy to apply in a standard way. You can view a production example for [B4W-19-01](https://github.com/southwick-associates/B4W-19-01/blob/master/code/svy/7-recode-outliers.R).
+Outliers should be considered when working with continuous survey variables. There are no hard and fast rules for outlier identification, but [Tukey's Test]( https://en.wikipedia.org/wiki/Outlier#Tukey%27s_fences) provides one method that is easy to apply in a standard way. You can view a production example for [B4W-19-01](https://github.com/southwick-associates/B4W-19-01/blob/master/code/svy/7-recode-outliers.R). 
+
+Package sastats includes a few simple outlier functions:
+
+- For visualizing: `outlier_plot()`
+- For identification: `outlier_tukey()`
+- For top-coding: `outlier_tukey_top()`
 
 ### Example Data
 
-For demonstration, package sastats includes a survey dataset with annual participation metrics for 9 outdoor recreation activities:
+For demonstration, I included a survey dataset with annual participation metrics for 9 outdoor recreation activities:
 
 ```{r}
 library(dplyr)
@@ -35,7 +41,7 @@ glimpse(activities)
 
 ## Visualize
 
-Visualizing the data is a good first step. We can use `sastats::outlier_plot()` which is largely a wrapper for `ggplot2::geom_boxplot()`. The `ignore_zero = TRUE` specification ensures we exclude any respondents who didn't actually participate.
+Visualizing the data is a good first step. We can use `outlier_plot()` which is largely a wrapper for a few [ggplot2](https://ggplot2.tidyverse.org/) functions. The `ignore_zero = TRUE` specification ensures we exclude any respondents who didn't actually participate.
 
 ```{r}
 outlier_plot(activities, days, act, ignore_zero = TRUE)
