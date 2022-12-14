@@ -1,0 +1,125 @@
+---
+title: "vignettes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignettes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sastats)
+library(here)
+library(tidyverse)
+library(purrr)
+```
+
+The data set I choose to analysis is Traumatic Brain Injury (TBI). It came from TidyTuesday, containing data from CDC and Veterans Brain Injury Center. This data set provides information about the incidence of brain injury, aiming to raise awareness on the popularity of TBI among civilian and military population.
+The question I choose to answer with this data analysis is the relationship between age, type of injury and TBI. 
+Detailed data dictionary and original data can be founded from the website:
+<https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-03-24>.
+
+```{r, warning=FALSE}
+if(!file.exists(here("data", "tbi_age"))){
+  tbi_age <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
+  tbi_year <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv')
+  
+  saveRDS(tbi_age, file = here("data","tbi_age.RDS"))
+  saveRDS(tbi_year, file = here("data","tbi_year.RDS"))
+}
+
+tbi_age = readRDS(here("data","tbi_age.RDS"))
+tbi_year = readRDS(here("data","tbi_year.RDS"))
+```
+
+```{r}
+colnames(tbi_age)[4] <- "number_est_2014"
+# join two data sets together by school name and state
+df = inner_join(tbi_year,tbi_age,by = c("type" = "type","injury_mechanism" = "injury_mechanism", "rate_est"="rate_est"))
+# remove missing data
+df = df %>% compact()
+
+# show sample sub data set 
+slice_sample(df, n = 5)
+```
+
+```{r}
+#compare TBI and age 
+ggplot(df, aes(x=age_group, y=number_est,fill = age_group)) + 
+  geom_boxplot() + theme_minimal() + 
+  labs(title="Relationship between Traumatic Brain Injury (TBI) and Age",
+       subtitle = "After log transformation",
+       x = "Age Group", y="log(Number of cases)", 
+       caption = "Data source: TidyTuesday - Traumatic Brain Injury",
+       fill = "Age Group") + 
+  theme(axis.text.x = element_text(angle = 15, vjust=0.8))
+```
+
+```{r}
+df1 <- df %>%
+    group_by(age_group) %>% 
+    mutate(
+        is_outlier = outlier_tukey(number_est, apply_log = FALSE), 
+        est_cleaned = ifelse(is_outlier, NA, number_est) 
+    ) %>% 
+    ungroup()
+
+outlier_plot(df1, number_est, age_group, apply_log = FALSE, show_outliers = TRUE)
+outlier_pct(df1, number_est)
+outlier_mean_compare(df1, number_est, est_cleaned, age_group) 
+```
+
+```{r}
+#compare the estimated observed cases between age group by year
+df2 <- df %>%
+  group_by(year,age_group) %>%
+  summarise(mean = round(mean(number_est), 3))
+df2
+
+ggplot(df2,aes(x=age_group,y = mean, col = year, group=1)) + geom_line() +
+  geom_point() + facet_wrap(~year) +
+  labs(title="Average Number of TBI in Each Age Groupe", 
+  subtitle = "From 2008 to 2014",
+      x = "Age Group", y="Average Number of Observed Cases", 
+       caption = "Data source: TidyTuesday - TBI") + 
+  theme(axis.text.x = element_text(angle = 90, vjust=0.5, size = 5))
+```
+
+```{r}
+#create a data set for each year
+df_injury = df |> split(df$injury_mechanism)
+df3 = df_injury |> map_dfr(.f = ~mean(.x$number_est))
+df3 = as.data.frame(t(df3))
+df3 = rownames_to_column(df3)
+df3
+
+ggplot(df3) +
+  geom_bar(aes(x = rowname, y = V1, fill = rowname), 
+           stat = "identity")  +
+  labs(title = "Average Number of TBI in each type of injury",
+       subtitle = "From 2008 to 2014",
+       x = "Type of Injury", 
+       y = "Number of Observed Cases",
+       fill = "Type of injury",caption = "Data source: TidyTuesday - TBI") +
+  theme(axis.text.x = element_text(size = 4, angle = 10, hjust = 1))
+```
+
+Interpretation of Results:
+Based on the statistical summary and graphs, I found that assault is most likely to cause TBI compared to other types of injury. Even though the relationship between TBI and age differs across year, in general, the age group with the highest TBI cases is age 15-24 even after removing outliers. 
+
+Functions used in the analysis: 
+- dplyr: inner_join(), slice_sample(), %>%, group_by(),summarize(),mutate(),select()
+- ggplot2: geom_boxplot(), geom_bar(), geom_point(),geom_line()
+- purrr:map_dfr(), compact()
+- sastats (R package): outlier_tukey(),outlier_plot(),outlier_pct(),outlier_mean_compare()
+
+
+
+

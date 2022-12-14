@@ -1,0 +1,17 @@
+url: ~
+template:
+  bootstrap: 5
+  theme: breeze-light
+  bootswatch: lux
+  navbar:
+    structure:
+        left:[intro,articles]
+        right:[github]
+  bslib:
+    pkgdown-nav-height: 100px
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "JetBrains Mono"}
+  home:
+    sidebar:
+        structure: [links, authors, dev]

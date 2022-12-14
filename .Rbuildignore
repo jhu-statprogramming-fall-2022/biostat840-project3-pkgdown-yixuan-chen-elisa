@@ -5,3 +5,6 @@
 ^README\.md$
 ^data-raw$
 ^github-vignettes$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
