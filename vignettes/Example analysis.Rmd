@@ -20,6 +20,14 @@ Detailed data dictionary and original data can be founded from the website:
 <https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-03-24>.
 
 ```{r}
+current_wd <- getwd()
+if (file.exists("data")) {
+  setwd(file.path(current_wd, "data"))
+} else {
+  dir.create(file.path(current_wd, "data"))
+  setwd(file.path(current_wd, "data"))
+}
+
 if(!file.exists(here("data", "tbi_age"))){
   tbi_age <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
   tbi_year <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv')
@@ -108,6 +116,7 @@ Interpretation of Results:
 Based on the statistical summary and graphs, I found that assault is most likely to cause TBI compared to other types of injury. Even though the relationship between TBI and age differs across year, in general, the age group with the highest TBI cases is age 15-24 even after removing outliers. 
 
 Functions used in the analysis: 
+
 - dplyr: inner_join(), slice_sample(), %>%, group_by(),summarize(),mutate(),select()
 - ggplot2: geom_boxplot(), geom_bar(), geom_point(),geom_line()
 - purrr:map_dfr(), compact()

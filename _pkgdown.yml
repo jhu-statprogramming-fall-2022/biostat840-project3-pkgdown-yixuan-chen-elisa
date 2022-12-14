@@ -2,16 +2,20 @@ url: ~
 template:
   bootstrap: 5
   theme: breeze-light
-  bootswatch: lux
+  bootswatch: flatly
   navbar:
     structure:
-        left:[intro,reference]
-        right:[github]
+        left: [intro,reference,article]
+        right: [search,github]
   bslib:
     pkgdown-nav-height: 100px
-    base_font: {google: "Roboto"}
+    base_font: {google: "Source Sans Pro"}
     heading_font: {google: "Roboto Slab"}
     code_font: {google: "JetBrains Mono"}
-  home:
-    sidebar:
-        structure: [links, authors]
+home:
+  sidebar:
+    structure: [links, license, authors, citation, custom, dev]
+    components:
+      custom:
+        title: Site Developer
+        text: Yixuan Chen

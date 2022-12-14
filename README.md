@@ -1,41 +1,41 @@
-# sastats 
-
-# Author: 
-Dan Kary, Yixuan Chen 
-
-# Description: 
-The package provides several useful statistics calculations including identifying
-outliers, calculating survey sampling error and survey rake weighting.
-
-# Exported Functions:
-error_me, error_se_mean, error_se_prop,
-outlier_mean_compare, outlier_pct, outlier_plot, outlier_tukey,
-outlier_tukey_top, rake_weight 
-
-# Example: 
-library(dplyr) 
-data(svy)
-outlier_plot(svy$act, days, act) 
-outlier_plot(svy$act, days, act, apply_log = TRUE)
-
-# Github and website information
-
-Github link: <https://github.com/southwick-associates/sastats>
-
-deployed website: <https://jhu-statprogramming-fall-2022.github.io/biostat840-project3-pkgdown-yixuan-chen-elisa>
-
-pkgdown website:
-- modify the entire appearance of the website by setting bootswatch to lux
-- change fonts used for majority of text, headings and code
-- change the color for syntax highlighting in code box
-- customize the navigation bar
-- customize the side bar
-
-
 # sastats
 
 A Southwick package for useful statistics calculations (particularly
 with regard to surveys)
+
+## Description:
+
+The package provides several useful statistics calculations including
+identifying outliers, calculating survey sampling error and survey rake
+weighting.
+
+## Exported Functions:
+
+error_me, error_se_mean, error_se_prop, outlier_mean_compare,
+outlier_pct, outlier_plot, outlier_tukey, outlier_tukey_top, rake_weight
+
+## Example:
+
+``` r
+library(dplyr)
+data(svy)
+outlier_plot(svy$act, days, act) outlier_plot(svy$act, days, act,apply_log = TRUE)
+```
+
+## Github and website information
+
+Github link: <https://github.com/southwick-associates/sastats>
+
+deployed website:
+<https://jhu-statprogramming-fall-2022.github.io/biostat840-project3-pkgdown-yixuan-chen-elisa>
+
+pkgdown website: 
+
+- modify the entire appearance of the website  
+- change fonts used for majority of text,headings and code 
+- change the color for syntax highlighting in code box 
+- customize the navigation bar 
+- customize the side bar
 
 ## Installation
 
