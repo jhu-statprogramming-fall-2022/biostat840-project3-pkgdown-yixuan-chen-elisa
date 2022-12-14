@@ -1,20 +1,13 @@
 ---
-title: "vignettes"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{vignettes}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+title: "Example analysis"
+output: html_document
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r setup}
+```{r}
 library(sastats)
 library(here)
 library(tidyverse)
@@ -26,10 +19,10 @@ The question I choose to answer with this data analysis is the relationship betw
 Detailed data dictionary and original data can be founded from the website:
 <https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-03-24>.
 
-```{r, warning=FALSE}
+```{r}
 if(!file.exists(here("data", "tbi_age"))){
-  tbi_age <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
-  tbi_year <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv')
+  tbi_age <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_age.csv')
+  tbi_year <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-24/tbi_year.csv')
   
   saveRDS(tbi_age, file = here("data","tbi_age.RDS"))
   saveRDS(tbi_year, file = here("data","tbi_year.RDS"))

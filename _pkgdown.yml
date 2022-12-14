@@ -5,7 +5,7 @@ template:
   bootswatch: lux
   navbar:
     structure:
-        left:[intro,articles]
+        left:[intro,reference]
         right:[github]
   bslib:
     pkgdown-nav-height: 100px
@@ -14,4 +14,4 @@ template:
     code_font: {google: "JetBrains Mono"}
   home:
     sidebar:
-        structure: [links, authors, dev]
+        structure: [links, authors]

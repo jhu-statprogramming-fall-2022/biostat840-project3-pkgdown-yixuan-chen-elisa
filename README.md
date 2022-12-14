@@ -1,5 +1,4 @@
-# Title: 
-sastats 
+# sastats 
 
 # Author: 
 Dan Kary, Yixuan Chen 
@@ -22,6 +21,7 @@ outlier_plot(svy$act, days, act, apply_log = TRUE)
 # Github and website information
 
 Github link: <https://github.com/southwick-associates/sastats>
+
 deployed website: <https://jhu-statprogramming-fall-2022.github.io/biostat840-project3-pkgdown-yixuan-chen-elisa>
 
 pkgdown website:
