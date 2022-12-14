@@ -1,0 +1,10 @@
+pandoc: '2.18'
+pkgdown: 2.0.6
+pkgdown_sha: ~
+articles:
+  Example analysis: Example analysis.html
+  errors: errors.html
+  outliers: outliers.html
+  weight: weight.html
+last_built: 2022-12-14T07:31Z
+
